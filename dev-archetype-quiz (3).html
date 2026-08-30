@@ -1,0 +1,2260 @@
+<!DOCTYPE html>
+<html lang="en" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Kind of Developer Are You?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --bg:        #FAF7FF;
+    --card:      #FFFFFF;
+    --card-2:    #FAF7FF;
+    --ink:       #221F35;
+    --ink-dim:   #6E6A85;
+    --ink-faint: #A6A2BD;
+    --line:      #EDE9F9;
+    --shadow:    rgba(80,60,140,0.22);
+
+    --c-data:     #FFB454;
+    --c-game:     #FF6B9D;
+    --c-full:     #4D96FF;
+    --c-ux:       #B892FF;
+    --c-robo:     #2EC4B6;
+    --c-devops:   #6BCB77;
+    --c-mobile:   #FF8C42;
+    --c-security: #5B7FDE;
+    --c-qa:       #FF6B6B;
+
+    --pos-bg: rgba(46,204,113,0.12); --pos-ink: #1B7A43;
+    --neg-bg: rgba(255,159,67,0.14); --neg-ink: #9A5B12;
+
+    --display: 'Fredoka', 'Noto Sans Thai', 'Noto Sans SC', sans-serif;
+    --body: 'Inter', 'Noto Sans Thai', 'Noto Sans SC', sans-serif;
+  }
+
+  html[data-theme="dark"]{
+    --bg:        #15121F;
+    --card:      #1E1A2E;
+    --card-2:    #262138;
+    --ink:       #F1EEFB;
+    --ink-dim:   #B7B2D6;
+    --ink-faint: #746F94;
+    --line:      #34304A;
+    --shadow:    rgba(0,0,0,0.45);
+    --pos-bg: rgba(46,204,113,0.16); --pos-ink: #7BE6A0;
+    --neg-bg: rgba(255,159,67,0.18); --neg-ink: #FFC98A;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:36px 16px 70px;
+    position:relative;
+    overflow-x:hidden;
+    transition:background .3s ease, color .3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+
+  .blob{ position:fixed; border-radius:50%; filter:blur(60px); opacity:0.35; z-index:0; pointer-events:none; animation:drift 16s ease-in-out infinite; }
+  html[data-theme="dark"] .blob{ opacity:0.28; }
+  .blob1{ width:340px; height:340px; background:var(--c-ux); top:-120px; left:-100px; animation-delay:0s; }
+  .blob2{ width:300px; height:300px; background:var(--c-data); bottom:-100px; right:-80px; animation-delay:-5s; }
+  .blob3{ width:220px; height:220px; background:var(--c-full); top:40%; right:-100px; animation-delay:-10s; }
+  .blob4{ width:200px; height:200px; background:var(--c-game); bottom:20%; left:-90px; animation-delay:-3s; }
+
+  @keyframes drift{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(20px,-25px) scale(1.06); } }
+
+  .app{ width:100%; max-width:640px; z-index:1; }
+
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:600; font-size:14px; color:var(--ink-dim); }
+  .brand .dot{ width:8px; height:8px; border-radius:50%; background:var(--c-game); flex-shrink:0; }
+  .controls{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+  .lang-switch, .icon-btn-group{ display:flex; background:var(--card); border-radius:999px; padding:3px; box-shadow:0 4px 14px -6px var(--shadow); }
+  .lang-btn{ font-family:var(--display); font-weight:600; font-size:12px; border:none; background:none; color:var(--ink-faint); padding:6px 13px; border-radius:999px; cursor:pointer; transition:background .18s ease, color .18s ease; }
+  .lang-btn.active{ background:linear-gradient(135deg, var(--c-game), var(--c-ux)); color:#fff; }
+
+  .lang-select{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:12.5px;
+    color:var(--ink);
+    background:var(--card);
+    border:none;
+    border-radius:999px;
+    padding:8px 30px 8px 14px;
+    cursor:pointer;
+    box-shadow:0 4px 14px -6px var(--shadow);
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236E6A85' stroke-width='2'%3e%3cpath d='M5 8l5 5 5-5'/%3e%3c/svg%3e");
+    background-repeat:no-repeat;
+    background-position:right 8px center;
+    background-size:14px;
+  }
+  .lang-select:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+
+  .icon-btn{ border:none; background:var(--card); color:var(--ink-dim); width:34px; height:34px; border-radius:999px; cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px -6px var(--shadow); transition:transform .15s ease, background .18s ease; }
+  .icon-btn:hover{ transform:translateY(-2px); }
+  .icon-btn:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+  .icon-btn[aria-pressed="false"]{ opacity:0.5; }
+
+  .card{ background:var(--card); border-radius:28px; padding:42px 38px; box-shadow:0 24px 60px -20px var(--shadow), 0 4px 16px -4px var(--shadow); transition:background .3s ease; }
+  @media (max-width:560px){ .card{ padding:30px 22px; border-radius:22px; } }
+
+  .screen{ display:none; animation:fadeUp .45s cubic-bezier(.2,.8,.2,1) both; }
+  .screen.active{ display:block; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+
+  .emoji-row{ display:flex; gap:8px; margin-bottom:22px; font-size:26px; flex-wrap:wrap; }
+  .emoji-row button{ width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:var(--card-2); cursor:pointer; border:none; font-size:inherit; transition:transform .15s ease; }
+  .emoji-row button:hover{ transform:scale(1.1) translateY(-2px); }
+  .emoji-row button:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+
+  h1{ font-family:var(--display); font-weight:700; font-size:clamp(26px,6vw,38px); line-height:1.2; letter-spacing:-0.01em; margin-bottom:14px; }
+  h1 .hl{ color:var(--c-ux); }
+
+  .lede{ color:var(--ink-dim); font-size:15.5px; line-height:1.65; max-width:48ch; margin-bottom:24px; }
+
+  .mode-switch{ display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+  .mode-btn{ font-family:var(--display); font-weight:600; font-size:12.5px; color:var(--ink-dim); background:var(--card-2); border:2px solid transparent; border-radius:14px; padding:10px 14px; cursor:pointer; text-align:left; transition:border-color .15s ease, background .15s ease; }
+  .mode-btn.active{ border-color:var(--c-ux); background:var(--card); color:var(--ink); }
+  .mode-btn:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+  .mode-btn small{ display:block; font-family:var(--body); font-weight:500; font-size:11px; color:var(--ink-faint); margin-top:2px; }
+
+  .meta-row{ display:flex; gap:10px; margin-bottom:26px; flex-wrap:wrap; }
+  .meta-pill{ font-weight:600; font-size:12.5px; color:var(--ink-dim); background:var(--card-2); border-radius:999px; padding:7px 14px; }
+
+  .btn{ font-family:var(--display); font-size:16px; font-weight:600; color:#fff; background:linear-gradient(135deg, var(--c-game), var(--c-ux)); border:none; padding:16px 30px; border-radius:16px; cursor:pointer; display:inline-flex; align-items:center; gap:10px; box-shadow:0 12px 26px -10px rgba(255,107,157,0.55); transition:transform .18s ease, box-shadow .18s ease; }
+  .btn:hover{ transform:translateY(-3px) scale(1.02); box-shadow:0 16px 30px -8px rgba(255,107,157,0.6); }
+  .btn:active{ transform:translateY(0) scale(0.99); }
+  .btn:focus-visible{ outline:3px solid var(--c-ux); outline-offset:3px; }
+  .btn.secondary{ background:var(--card-2); color:var(--ink); box-shadow:none; }
+  .btn.secondary:hover{ box-shadow:0 8px 18px -10px var(--shadow); }
+  .btn.small{ padding:10px 18px; font-size:13.5px; border-radius:12px; }
+  .btn:disabled{ opacity:0.45; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+
+  .archetype-strip{ display:flex; gap:8px; margin-top:26px; flex-wrap:wrap; }
+  .chip{ font-size:12px; font-weight:600; padding:7px 12px 7px 8px; border-radius:999px; background:var(--card-2); color:var(--ink-dim); display:flex; align-items:center; gap:6px; border:none; cursor:pointer; transition:transform .15s ease, background .15s ease; }
+  .chip:hover{ transform:translateY(-2px); background:var(--line); }
+
+  .legend-trigger{ display:block; font-family:var(--display); font-weight:600; font-size:12.5px; color:var(--ink-faint); background:none; border:none; cursor:pointer; padding:4px 0; margin-top:14px; text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
+  .legend-trigger:hover{ color:var(--ink-dim); text-decoration-color:var(--ink-faint); }
+  .legend-trigger:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+  .chip:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+
+  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+  /* ----- builder ----- */
+  .builder{ background:var(--card-2); border-radius:18px; padding:20px; margin-bottom:20px; }
+  .builder-label{ font-family:var(--display); font-weight:600; font-size:12.5px; color:var(--ink-faint); margin-bottom:10px; }
+  .cat-grid{ display:grid; grid-template-columns:56px 1fr; gap:8px; margin-bottom:8px; }
+  .cat-grid input{ font-family:var(--body); font-size:13.5px; padding:9px 10px; border-radius:10px; border:2px solid var(--line); background:var(--card); color:var(--ink); }
+  .cat-grid input.emoji-input{ text-align:center; }
+  .q-builder-row{ background:var(--card); border-radius:14px; padding:14px; margin-bottom:10px; }
+  .q-builder-row input.prompt-input{ width:100%; font-family:var(--body); font-weight:600; font-size:13.5px; padding:9px 10px; border-radius:10px; border:2px solid var(--line); background:var(--card-2); color:var(--ink); margin-bottom:8px; }
+  .opt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  @media (max-width:480px){ .opt-grid{ grid-template-columns:1fr; } }
+  .opt-grid input{ font-family:var(--body); font-size:12.5px; padding:8px 9px; border-radius:9px; border:2px solid var(--line); background:var(--card-2); color:var(--ink); }
+  .q-builder-remove{ font-size:11.5px; font-weight:600; color:var(--c-qa); background:none; border:none; cursor:pointer; margin-top:8px; }
+  .builder-actions{ display:flex; gap:10px; margin-top:6px; flex-wrap:wrap; align-items:center; }
+  .builder-hint{ font-size:12px; color:var(--c-qa); margin-top:10px; display:none; }
+  .builder-hint.show{ display:block; }
+
+  /* ----- quiz ----- */
+  .progress-row{ display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+  .progress-count{ font-family:var(--display); font-weight:600; font-size:13px; color:var(--ink-faint); white-space:nowrap; }
+  .progress-track{ flex:1; height:10px; background:var(--card-2); border-radius:999px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--c-full),var(--c-ux),var(--c-game)); border-radius:999px; transition:width .45s cubic-bezier(.4,0,.2,1); }
+
+  .q-eyebrow{ font-weight:700; font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--c-ux); margin-bottom:10px; }
+  .q-text{ font-family:var(--display); font-size:clamp(20px,4vw,25px); font-weight:600; line-height:1.4; margin-bottom:26px; }
+
+  .options{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:520px){ .options{ grid-template-columns:1fr; } }
+
+  .option{ text-align:left; display:flex; align-items:flex-start; gap:12px; background:var(--card-2); border:2px solid transparent; color:var(--ink); font-family:var(--body); font-size:14.5px; font-weight:500; line-height:1.45; padding:16px 15px; border-radius:16px; cursor:pointer; transition:border-color .15s ease, background .15s ease, transform .12s ease; }
+  .option:hover{ transform:translateY(-2px); border-color:var(--opt-color, var(--c-ux)); box-shadow:0 10px 22px -12px var(--shadow); }
+  .option:active{ transform:translateY(0); }
+  .option:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+  .option .badge{ flex-shrink:0; width:26px; height:26px; border-radius:9px; background:var(--opt-color, var(--c-ux)); color:#fff; font-family:var(--display); font-weight:600; font-size:12.5px; display:flex; align-items:center; justify-content:center; }
+
+  .quiz-footer{ display:flex; justify-content:space-between; align-items:center; margin-top:24px; flex-wrap:wrap; gap:8px; }
+  .key-hint{ font-size:11.5px; color:var(--ink-faint); font-family:var(--body); }
+  @media (max-width:520px){ .key-hint{ display:none; } }
+  .back-link{ font-family:var(--body); font-weight:600; font-size:13px; color:var(--ink-faint); background:none; border:none; cursor:pointer; padding:6px 0; }
+  .back-link:hover{ color:var(--ink-dim); }
+  .back-link:disabled{ opacity:0; pointer-events:none; }
+
+  /* ----- review ----- */
+  .review-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:26px; }
+  .review-item{ display:flex; align-items:flex-start; gap:12px; background:var(--card-2); border-radius:14px; padding:12px 14px; border:none; width:100%; text-align:left; cursor:pointer; font-family:inherit; transition:background .15s ease, transform .12s ease; }
+  .review-item:hover{ background:var(--line); transform:translateY(-1px); }
+  .review-item:active{ transform:translateY(0); }
+  .review-item:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+  .review-dot{ width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+  .review-q{ font-size:11.5px; font-weight:600; color:var(--ink-faint); margin-bottom:2px; }
+  .review-a{ font-size:13.5px; color:var(--ink); }
+
+  /* ----- results ----- */
+  .result-eyebrow{ font-weight:700; font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:14px; }
+  .result-card{ display:flex; gap:20px; align-items:center; padding:26px; background:var(--card-2); border-radius:22px; margin-bottom:24px; transition:background .4s ease; }
+  @media (max-width:520px){ .result-card{ flex-direction:column; text-align:center; } }
+  .glyph{ width:78px; height:78px; flex-shrink:0; border-radius:22px; display:flex; align-items:center; justify-content:center; font-size:38px; }
+  .result-name{ font-family:var(--display); font-size:clamp(21px,5vw,27px); font-weight:700; margin-bottom:5px; }
+  .result-tag{ font-size:14.5px; font-weight:600; color:var(--ink-dim); margin-bottom:10px; }
+  .result-desc{ font-size:14px; color:var(--ink-dim); line-height:1.65; }
+  .result-mix{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .mix-pill{ display:flex; align-items:center; gap:5px; font-family:var(--display); font-weight:600; font-size:12px; color:#fff; padding:5px 10px; border-radius:999px; }
+
+  .second-note{ font-size:13.5px; color:var(--ink-dim); line-height:1.6; background:var(--card-2); border-radius:14px; padding:14px 16px; margin-bottom:6px; }
+
+  .tie-badge{ display:inline-flex; align-items:center; gap:7px; font-family:var(--display); font-weight:600; font-size:12.5px; color:var(--ink); background:var(--card-2); padding:8px 14px; border-radius:999px; margin-bottom:16px; }
+
+  .why-toggle{ display:inline-flex; align-items:center; gap:6px; font-family:var(--display); font-weight:600; font-size:13px; color:var(--ink-dim); background:none; border:none; cursor:pointer; padding:6px 0; margin-top:10px; }
+  .why-toggle:hover{ color:var(--ink); }
+  .why-toggle:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+  .why-chevron{ display:inline-block; transition:transform .2s ease; font-size:11px; }
+  .why-toggle[aria-expanded="true"] .why-chevron{ transform:rotate(180deg); }
+  .why-list{ display:flex; flex-direction:column; gap:8px; margin-top:12px; margin-bottom:6px; }
+  .why-item{ display:flex; align-items:baseline; gap:10px; background:var(--card-2); border-radius:12px; padding:10px 12px; font-size:13px; color:var(--ink-dim); line-height:1.45; }
+  .why-item .why-q{ font-family:var(--display); font-weight:600; color:var(--ink-faint); font-size:11px; flex-shrink:0; white-space:nowrap; }
+
+  .section-label{ font-family:var(--display); font-weight:600; font-size:13px; color:var(--ink-dim); margin-bottom:16px; margin-top:32px; }
+
+  .chart{ display:flex; flex-wrap:wrap; gap:16px 10px; margin-bottom:8px; }
+  .bar-col{ width:60px; display:flex; flex-direction:column; align-items:center; }
+  .bar-pct{ font-family:var(--display); font-size:12.5px; font-weight:600; margin-bottom:8px; }
+  .bar{ width:100%; max-width:42px; border-radius:10px 10px 5px 5px; height:4px; transition:height 1s cubic-bezier(.16,1,.3,1); }
+  .bar-label{ font-family:var(--display); font-size:10.5px; font-weight:600; color:var(--ink-dim); margin-top:9px; text-align:center; line-height:1.3; }
+
+  /* ----- detail tabs (strengths / career / fun facts) ----- */
+  .detail-card{ margin-top:28px; border:1.5px solid var(--line); border-radius:20px; padding:16px 18px 20px; }
+  .detail-tabs{ display:flex; gap:4px; background:var(--card-2); border-radius:14px; padding:4px; margin-bottom:18px; }
+  .detail-tab{ flex:1; font-family:var(--display); font-weight:600; font-size:12.5px; color:var(--ink-faint); background:none; border:none; border-radius:10px; padding:10px 8px; cursor:pointer; transition:background .18s ease, color .18s ease; }
+  .detail-tab:hover{ color:var(--ink-dim); }
+  .detail-tab[aria-selected="true"]{ background:var(--card); color:var(--ink); box-shadow:0 3px 10px -4px var(--shadow); }
+  .detail-tab:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+  .detail-panel{ animation:fadeUp .3s cubic-bezier(.2,.8,.2,1) both; }
+  .detail-panel:focus-visible{ outline:none; }
+
+  .fun-icon-wrap{ width:60px; height:60px; border-radius:16px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+  .fun-icon-wrap svg{ width:32px; height:32px; display:block; }
+  .career-row{ margin-bottom:12px; }
+  .career-row:last-child{ margin-bottom:0; }
+  .career-row-label{ font-family:var(--display); font-weight:600; font-size:12px; color:var(--ink-faint); margin-bottom:6px; }
+  .tag-list{ display:flex; flex-wrap:wrap; gap:6px; }
+  .tag-pill{ font-size:12.5px; font-weight:500; background:var(--card-2); color:var(--ink); padding:5px 11px; border-radius:999px; }
+
+  .pros-cons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:520px){ .pros-cons{ grid-template-columns:1fr; } }
+  .pc-box{ border-radius:16px; padding:16px 18px; }
+  .pc-box.pos{ background:var(--pos-bg); }
+  .pc-box.neg{ background:var(--neg-bg); }
+  .pc-title{ font-family:var(--display); font-weight:600; font-size:12.5px; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .pc-box.pos .pc-title{ color:var(--pos-ink); }
+  .pc-box.neg .pc-title{ color:var(--neg-ink); }
+  .pc-list{ list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .pc-list li{ font-size:13px; line-height:1.5; color:var(--ink-dim); padding-left:16px; position:relative; }
+  .pc-box.pos .pc-list li::before{ content:'+'; position:absolute; left:0; color:var(--pos-ink); font-weight:700; }
+  .pc-box.neg .pc-list li::before{ content:'\2013'; position:absolute; left:0; color:var(--neg-ink); font-weight:700; }
+
+  .rich-only.hidden-mode{ display:none !important; }
+
+  /* ----- team mode: bordered/outlined so it reads as a tool, not a read-only info card ----- */
+  .team-box{ background:var(--card); border:2px solid var(--line); border-radius:18px; padding:20px 22px; }
+  .team-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+  select.team-select{ font-family:var(--body); font-weight:600; font-size:13.5px; color:var(--ink); background:var(--card); border:2px solid var(--line); border-radius:12px; padding:10px 12px; flex:1; min-width:160px; cursor:pointer; }
+
+  .team-roster{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .team-chip{ display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; background:var(--card); color:var(--ink); padding:6px 8px 6px 10px; border-radius:999px; }
+  .team-chip button{ border:none; background:none; color:var(--ink-faint); cursor:pointer; font-size:13px; line-height:1; padding:2px; }
+  .team-note{ font-size:13.5px; color:var(--ink-dim); line-height:1.6; margin-bottom:14px; display:none; }
+  .team-note.show{ display:block; }
+  .team-empty{ font-size:12.5px; color:var(--ink-faint); }
+
+  .session-trail{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:20px; font-size:11.5px; color:var(--ink-faint); font-weight:600; }
+  .session-trail .chips{ display:flex; gap:4px; font-size:16px; }
+
+  .result-actions{ display:flex; gap:12px; margin-top:30px; flex-wrap:wrap; }
+  .hint{ text-align:center; font-size:12.5px; color:var(--ink-faint); margin-top:20px; }
+
+  .toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--card); font-family:var(--display); font-weight:600; font-size:13px; padding:12px 20px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; z-index:30; white-space:nowrap; max-width:90vw; overflow:hidden; text-overflow:ellipsis; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ----- confetti ----- */
+  #confetti-layer{ position:fixed; inset:0; pointer-events:none; z-index:15; overflow:hidden; }
+  .confetti-piece{ position:absolute; top:-20px; width:8px; height:14px; opacity:0.9; animation:confetti-fall linear forwards; }
+  @keyframes confetti-fall{
+    to{ transform:translateY(110vh) rotate(540deg); opacity:0.4; }
+  }
+
+  /* ----- archetype preview modal ----- */
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(20,15,35,0.55); backdrop-filter:blur(2px); display:none; align-items:center; justify-content:center; z-index:40; padding:20px; }
+  .modal-backdrop.show{ display:flex; }
+  .modal-panel{ background:var(--card); border-radius:24px; padding:32px; max-width:420px; width:100%; box-shadow:0 30px 70px -20px rgba(0,0,0,0.4); position:relative; }
+  .modal-close{ position:absolute; top:16px; right:16px; border:none; background:var(--card-2); color:var(--ink-dim); width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:14px; }
+  .modal-close:focus-visible{ outline:3px solid var(--c-ux); outline-offset:2px; }
+  .modal-glyph{ width:64px; height:64px; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:32px; margin-bottom:16px; }
+  .modal-name{ font-family:var(--display); font-weight:700; font-size:21px; margin-bottom:4px; }
+  .modal-tag{ font-size:13.5px; font-weight:600; color:var(--ink-dim); margin-bottom:12px; }
+  .modal-desc{ font-size:13.5px; color:var(--ink-dim); line-height:1.6; margin-bottom:14px; }
+  .modal-strengths{ list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .modal-strengths li{ font-size:12.5px; color:var(--ink-dim); padding-left:16px; position:relative; }
+  .modal-strengths li::before{ content:'+'; position:absolute; left:0; color:var(--pos-ink); font-weight:700; }
+
+  .legend-panel{ max-width:460px; }
+  .legend-list{ display:flex; flex-direction:column; gap:4px; max-height:60vh; overflow-y:auto; margin-top:6px; }
+  .legend-row{ display:flex; align-items:center; gap:12px; padding:10px 8px; border-radius:14px; }
+  .legend-glyph{ width:38px; height:38px; flex-shrink:0; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .legend-text{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+  .legend-name{ font-family:var(--display); font-weight:600; font-size:13.5px; }
+  .legend-tag{ font-size:12px; color:var(--ink-dim); line-height:1.35; }
+</style>
+</head>
+<body>
+
+<div class="blob blob1" aria-hidden="true"></div>
+<div class="blob blob2" aria-hidden="true"></div>
+<div class="blob blob3" aria-hidden="true"></div>
+<div class="blob blob4" aria-hidden="true"></div>
+<div id="confetti-layer" aria-hidden="true"></div>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span><span id="brand-text">dev archetype quiz</span></div>
+    <div class="controls">
+      <div class="lang-switch">
+        <label for="lang-select" class="sr-only">Language</label>
+        <select class="lang-select" id="lang-select">
+          <option value="en">English</option>
+          <option value="th">ไทย</option>
+          <option value="es">Español</option>
+          <option value="zh">中文</option>
+        </select>
+      </div>
+      <button class="icon-btn" id="sound-toggle" type="button" aria-pressed="true" aria-label="Mute sound">🔊</button>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark theme">🌙</button>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <!-- ================= INTRO ================= -->
+    <section class="screen active" id="screen-intro">
+      <div class="emoji-row" id="preview-chips" role="group" aria-label="Preview each developer type">
+        <button type="button" data-key="data" aria-label="Preview Data Scientist">📊</button><button type="button" data-key="game" aria-label="Preview Game Developer">🎮</button><button type="button" data-key="full" aria-label="Preview Full Stack Developer">🛠️</button><button type="button" data-key="ux" aria-label="Preview UX/UI Designer">🎨</button><button type="button" data-key="robo" aria-label="Preview Robotics Engineer">🤖</button><button type="button" data-key="devops" aria-label="Preview DevOps / Cloud Engineer">☁️</button><button type="button" data-key="mobile" aria-label="Preview Mobile Developer">📱</button><button type="button" data-key="security" aria-label="Preview Security Engineer">🔒</button><button type="button" data-key="qa" aria-label="Preview QA / Test Engineer">🐞</button>
+      </div>
+      <h1 id="intro-title">What kind of developer are you, <span class="hl" id="intro-title-hl">really?</span></h1>
+      <p class="lede" id="intro-lede">—</p>
+
+      <div class="mode-switch" id="mode-switch">
+        <button class="mode-btn active" id="mode-quick" type="button" data-mode="quick"></button>
+        <button class="mode-btn" id="mode-full" type="button" data-mode="full"></button>
+        <button class="mode-btn" id="mode-custom" type="button" data-mode="custom"></button>
+      </div>
+
+      <div class="meta-row" id="meta-row">
+        <span class="meta-pill" id="meta-1">—</span>
+        <span class="meta-pill" id="meta-2">—</span>
+        <span class="meta-pill" id="meta-3">—</span>
+      </div>
+
+      <!-- ===== custom quiz builder ===== -->
+      <div class="builder" id="builder-panel" style="display:none;">
+        <div class="builder-label" id="builder-cats-label">Your 4 categories</div>
+        <div id="cat-inputs"></div>
+
+        <div class="builder-label" id="builder-qs-label" style="margin-top:18px;">Your questions</div>
+        <div id="q-builder-list"></div>
+        <div class="builder-actions">
+          <button class="btn secondary small" id="add-question-btn" type="button">＋ —</button>
+        </div>
+        <div class="builder-hint" id="builder-hint"></div>
+      </div>
+
+      <button class="btn" id="start-btn">—</button>
+
+      <div class="archetype-strip" id="archetype-strip"></div>
+      <button class="legend-trigger" id="legend-trigger" type="button">—</button>
+    </section>
+
+    <!-- ================= QUIZ ================= -->
+    <section class="screen" id="screen-quiz">
+      <div class="progress-row">
+        <div class="progress-count"><span id="q-current">1</span>/<span id="q-total">18</span></div>
+        <div class="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+
+      <div class="q-eyebrow" id="q-eyebrow">Question 1</div>
+      <div class="q-text" id="q-text">Loading…</div>
+      <div class="options" id="options"></div>
+
+      <div class="quiz-footer">
+        <button class="back-link" id="back-btn" disabled>—</button>
+        <span class="key-hint" id="key-hint">—</span>
+      </div>
+    </section>
+
+    <!-- ================= REVIEW ================= -->
+    <section class="screen" id="screen-review">
+      <div class="result-eyebrow" id="review-eyebrow">Here's what you picked</div>
+      <div class="review-list" id="review-list"></div>
+      <div class="result-actions">
+        <button class="btn" id="see-result-btn">—</button>
+        <button class="btn secondary" id="edit-answers-btn">—</button>
+      </div>
+    </section>
+
+    <!-- ================= RESULTS ================= -->
+    <section class="screen" id="screen-results">
+      <div class="result-eyebrow" id="result-eyebrow">Your result</div>
+      <div class="tie-badge" id="tie-badge" style="display:none;"></div>
+
+      <div class="result-card" id="result-card">
+        <div class="glyph" id="res-glyph">📊</div>
+        <div>
+          <div class="result-name" id="res-name">—</div>
+          <div class="result-tag" id="res-tag">—</div>
+          <div class="result-mix" id="result-mix"></div>
+          <p class="result-desc" id="res-desc">—</p>
+        </div>
+      </div>
+
+      <p class="second-note" id="second-note" style="display:none;"></p>
+
+      <button class="why-toggle" id="why-toggle" type="button" aria-expanded="false" aria-controls="why-list">
+        <span id="why-toggle-label">Why you got this</span><span class="why-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="why-list" id="why-list" style="display:none;"></div>
+
+      <div class="detail-card rich-only" id="detail-card">
+        <div class="detail-tabs" role="tablist" aria-label="Result details" id="detail-tabs">
+          <button class="detail-tab" id="tab-strengths" role="tab" aria-selected="true" aria-controls="panel-strengths" type="button">—</button>
+          <button class="detail-tab" id="tab-career" role="tab" aria-selected="false" aria-controls="panel-career" tabindex="-1" type="button">—</button>
+          <button class="detail-tab" id="tab-fun" role="tab" aria-selected="false" aria-controls="panel-fun" tabindex="-1" type="button">—</button>
+        </div>
+
+        <div class="detail-panel" id="panel-strengths" role="tabpanel" aria-labelledby="tab-strengths">
+          <div class="pros-cons">
+            <div class="pc-box pos">
+              <div class="pc-title" id="pos-title">✅ Where you shine</div>
+              <ul class="pc-list" id="pos-list"></ul>
+            </div>
+            <div class="pc-box neg">
+              <div class="pc-title" id="neg-title">⚠️ Worth keeping in mind</div>
+              <ul class="pc-list" id="neg-list"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-panel" id="panel-career" role="tabpanel" aria-labelledby="tab-career" hidden>
+          <div class="career-row">
+            <div class="career-row-label" id="career-roles-label">Job titles</div>
+            <div class="tag-list" id="career-roles"></div>
+          </div>
+          <div class="career-row">
+            <div class="career-row-label" id="career-skills-label">Skills to build</div>
+            <div class="tag-list" id="career-skills"></div>
+          </div>
+        </div>
+
+        <div class="detail-panel" id="panel-fun" role="tabpanel" aria-labelledby="tab-fun" hidden>
+          <div class="fun-icon-wrap" id="fun-icon-wrap" aria-hidden="true"></div>
+          <div class="career-row">
+            <div class="career-row-label" id="fun-vibe-label">Your fictional vibe</div>
+            <div class="tag-list" id="fun-vibe"></div>
+          </div>
+          <div class="career-row">
+            <div class="career-row-label" id="fun-fit-label">Where you'd fit right in</div>
+            <div id="fun-fit" style="font-size:13.5px; color:var(--ink-dim); line-height:1.6;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label" id="chart-section-label">How you matched with each type</div>
+      <div class="chart" id="chart" aria-hidden="true"></div>
+      <p class="sr-only" id="chart-sr-summary" aria-live="polite"></p>
+
+      <div class="section-label" id="team-section-label">Team mode</div>
+      <div class="team-box">
+        <div class="team-row">
+          <select class="team-select" id="team-select" aria-label="Pick a teammate's developer type"></select>
+          <button class="btn secondary small" id="team-add-btn" type="button">—</button>
+        </div>
+        <div class="team-roster" id="team-roster"></div>
+        <p class="team-empty" id="team-empty">—</p>
+        <p class="team-note" id="team-note"></p>
+        <div class="chart" id="team-chart" aria-hidden="true"></div>
+        <p class="sr-only" id="team-chart-sr-summary" aria-live="polite"></p>
+      </div>
+
+      <div class="session-trail" id="session-trail" style="display:none;">
+        <span id="session-trail-label">Your results this session</span>
+        <span class="chips" id="session-trail-chips"></span>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn" id="share-btn">—</button>
+        <button class="btn secondary" id="download-btn">—</button>
+        <button class="btn secondary" id="retake-btn">—</button>
+      </div>
+
+      <p class="hint" id="hint-text">—</p>
+      <button class="legend-trigger" id="legend-trigger-results" type="button">—</button>
+    </section>
+
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="modal-backdrop" id="archetype-modal">
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-name" aria-describedby="modal-desc">
+    <button class="modal-close" id="modal-close" type="button" aria-label="Close">✕</button>
+    <div class="modal-glyph" id="modal-glyph" aria-hidden="true">📊</div>
+    <div class="modal-name" id="modal-name">—</div>
+    <div class="modal-tag" id="modal-tag">—</div>
+    <p class="modal-desc" id="modal-desc">—</p>
+    <ul class="modal-strengths" id="modal-strengths"></ul>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="legend-modal">
+  <div class="modal-panel legend-panel" role="dialog" aria-modal="true" aria-labelledby="legend-modal-title">
+    <button class="modal-close" id="legend-modal-close" type="button" aria-label="Close">✕</button>
+    <div class="modal-name" id="legend-modal-title">—</div>
+    <div class="legend-list" id="legend-list"></div>
+  </div>
+</div>
+
+<canvas id="share-canvas" width="1080" height="1080" style="display:none;"></canvas>
+
+<script>
+(function(){
+
+  let LANG = 'en';
+  let THEME = 'light';
+  let soundOn = true;
+  let audioCtx = null;
+  let quizMode = 'quick';
+
+  const UI = {
+    en: {
+      brand: "dev archetype quiz",
+      titlePre: "What kind of developer are you, ",
+      titleHl: "really?",
+      lede: "Forget the resume. Answer a few quick, everyday questions and we'll show you which developer type you match the closest — with a fun chart at the end.",
+      modeQuick: "⚡ Quick", modeQuickSub: "9 questions, ~1 min",
+      modeFull: "🧭 Full", modeFullSub: "18 questions, ~3 min",
+      modeCustom: "🎛️ Custom", modeCustomSub: "Build your own quiz",
+      pillsQuick: ["🕒 ~1 min", "❓ 9 questions", "✨ 9 types"],
+      pillsFull: ["🕒 ~3 min", "❓ 18 questions", "✨ 9 types"],
+      start: "Start the quiz →",
+      startCustom: "Start custom quiz →",
+      chips: ["📊 Data Scientist", "🎮 Game Developer", "🛠️ Full Stack Dev", "🎨 UX/UI Designer", "🤖 Robotics Engineer", "☁️ DevOps / Cloud", "📱 Mobile Dev", "🔒 Security Engineer", "🐞 QA / Test Engineer"],
+      chipHint: "Tap a type to preview it",
+      legendTrigger: "See all 9 types at a glance →",
+      legendTitle: "All developer types",
+      questionLabel: n => "Question " + n,
+      back: "← Back",
+      reviewEyebrow: "Here's what you picked",
+      seeResult: "See my result →",
+      editAnswers: "← Back to edit answers",
+      resultEyebrow: "Your result",
+      posTitle: "✅ Where you shine",
+      negTitle: "⚠️ Worth keeping in mind",
+      tabStrengths: "Strengths",
+      tabCareer: "Career",
+      tabFun: "Fun facts",
+      rolesLabel: "Job titles",
+      skillsLabel: "Skills to build",
+      chartLabel: "How you matched with each type",
+      characterLabel: "If you were a character…",
+      fitLabel: "Where you'd fit right in",
+      teamLabel: "Team mode",
+      teamAdd: "+ Add to team",
+      teamEmpty: "Add teammates to see your team's mix.",
+      teamAllSame: name => "Everyone's a " + name + " — you really found your people!",
+      teamAllDiff: "Every teammate brings something different — great spread!",
+      teamMix: (u,t) => "A solid mix — " + u + " different types across " + t + " people.",
+      teamComparePair: (you, youTrait, friend, friendTrait) => "You're a " + you + " — " + youTrait + ". They're a " + friend + " — " + friendTrait + ". Sounds like a solid team.",
+      sessionTrail: "Your results this session",
+      shareBtn: "🔗 Share",
+      downloadBtn: "🖼️ Download image",
+      shareCopied: "Copied to clipboard!",
+      retake: "↻ Take it again",
+      hint: "Just for fun — most devs are a mix of a few of these.",
+      mixed: (p1, pct1, p2, pct2) => "Mostly " + p1 + " (" + pct1 + "%), with a good bit of " + p2 + " (" + pct2 + "%).",
+      tieNote: (arr) => arr.length === 2
+        ? "It's a tie between " + arr[0] + " and " + arr[1] + "!"
+        : "It's a tie between " + arr.slice(0, -1).join(', ') + ', and ' + arr[arr.length - 1] + '!',
+      whyLabel: "Why you got this",
+      keyHint: "Tip: press 1–4 to answer, ← to go back",
+      secondNoteRich: (name, tag) => "You've also got real " + name + " energy: " + tag,
+      secondNoteGeneric: (name, pct) => "You also leaned toward " + name + " (" + pct + "%).",
+      customResultTag: "Your top match",
+      builderCats: "Your 4 categories",
+      builderQs: "Your questions",
+      addQuestion: "＋ Add question",
+      removeQuestion: "Remove",
+      builderHintInvalid: "Fill in all 4 category names and at least 3 complete questions (prompt + all 4 answers) before starting.",
+      catNamePlaceholder: n => "Category " + n + " name",
+      qPromptPlaceholder: "Question prompt",
+      optPlaceholder: n => "Answer for category " + n,
+      toggleSound: "Toggle sound",
+      toggleTheme: "Toggle light or dark theme",
+      closeModal: "Close",
+      removeFromTeam: "Remove from team"
+    },
+    th: {
+      brand: "แบบทดสอบสายนักพัฒนา",
+      titlePre: "จริงๆ แล้วคุณเป็นนักพัฒนา",
+      titleHl: "แบบไหน?",
+      lede: "ลืมเรซูเม่ไปก่อน ตอบคำถามง่ายๆ ในชีวิตประจำวันสักไม่กี่ข้อ แล้วเราจะบอกว่าคุณตรงกับนักพัฒนาแบบไหนมากที่สุด พร้อมกราฟสรุปผลตอนท้าย",
+      modeQuick: "⚡ แบบเร็ว", modeQuickSub: "9 ข้อ ~1 นาที",
+      modeFull: "🧭 แบบเต็ม", modeFullSub: "18 ข้อ ~3 นาที",
+      modeCustom: "🎛️ กำหนดเอง", modeCustomSub: "สร้างแบบทดสอบของคุณเอง",
+      pillsQuick: ["🕒 ~1 นาที", "❓ 9 คำถาม", "✨ 9 ประเภท"],
+      pillsFull: ["🕒 ~3 นาที", "❓ 18 คำถาม", "✨ 9 ประเภท"],
+      start: "เริ่มทำแบบทดสอบ →",
+      startCustom: "เริ่มแบบทดสอบของฉัน →",
+      chips: ["📊 นักวิทยาศาสตร์ข้อมูล", "🎮 นักพัฒนาเกม", "🛠️ นักพัฒนาฟูลสแตก", "🎨 นักออกแบบ UX/UI", "🤖 วิศวกรหุ่นยนต์", "☁️ DevOps / Cloud", "📱 นักพัฒนาแอปมือถือ", "🔒 วิศวกรความปลอดภัย", "🐞 QA / ทดสอบระบบ"],
+      chipHint: "แตะเพื่อดูตัวอย่างแต่ละประเภท",
+      legendTrigger: "ดูทั้ง 9 ประเภทแบบเร็ว ๆ →",
+      legendTitle: "นักพัฒนาทั้ง 9 ประเภท",
+      questionLabel: n => "คำถามที่ " + n,
+      back: "← ย้อนกลับ",
+      reviewEyebrow: "นี่คือคำตอบที่คุณเลือก",
+      seeResult: "ดูผลลัพธ์ของฉัน →",
+      editAnswers: "← กลับไปแก้คำตอบ",
+      resultEyebrow: "ผลลัพธ์ของคุณ",
+      posTitle: "✅ จุดแข็งของคุณ",
+      negTitle: "⚠️ สิ่งที่ควรระวัง",
+      tabStrengths: "จุดแข็ง",
+      tabCareer: "อาชีพ",
+      tabFun: "เกร็ดสนุก",
+      rolesLabel: "ตำแหน่งงาน",
+      skillsLabel: "ทักษะที่ควรฝึก",
+      chartLabel: "คุณตรงกับแต่ละประเภทแค่ไหน",
+      characterLabel: "ถ้าคุณเป็นตัวละครสักตัว…",
+      fitLabel: "ที่ที่คุณน่าจะเข้ากันได้ดี",
+      teamLabel: "โหมดทีม",
+      teamAdd: "+ เพิ่มเข้าทีม",
+      teamEmpty: "เพิ่มเพื่อนร่วมทีมเพื่อดูส่วนผสมของทีม",
+      teamAllSame: name => "คุณทุกคนเป็น" + name + "เหมือนกันเลย! ความคิดตรงกัน ผลงานเพิ่มเป็นสองเท่า",
+      teamAllDiff: "ทุกคนในทีมมีจุดเด่นต่างกัน ผสมกันได้ลงตัวมาก!",
+      teamMix: (u,t) => "ผสมกันได้ดี — มี " + u + " ประเภทที่แตกต่างกันจากทั้งหมด " + t + " คน",
+      teamComparePair: (you, youTrait, friend, friendTrait) => "คุณคือ" + you + " — " + youTrait + " ส่วนเพื่อนคือ" + friend + " — " + friendTrait + " ทีมนี้ไปด้วยกันได้ดีเลย",
+      sessionTrail: "ผลลัพธ์ของคุณในเซสชันนี้",
+      shareBtn: "🔗 แชร์",
+      downloadBtn: "🖼️ ดาวน์โหลดรูปภาพ",
+      shareCopied: "คัดลอกแล้ว!",
+      retake: "↻ ทำอีกครั้ง",
+      hint: "แค่สนุก ๆ นักพัฒนาส่วนใหญ่มีหลายด้านผสมกัน",
+      mixed: (p1, pct1, p2, pct2) => "ส่วนใหญ่เป็น" + p1 + " (" + pct1 + "%) และมีความเป็น" + p2 + "อยู่ไม่น้อย (" + pct2 + "%)",
+      tieNote: (arr) => arr.length === 2
+        ? "ผลเสมอกันระหว่าง" + arr[0] + "กับ" + arr[1] + "!"
+        : "ผลเสมอกันระหว่าง" + arr.slice(0, -1).join(', ') + "และ" + arr[arr.length - 1] + "!",
+      whyLabel: "ทำไมถึงได้ผลลัพธ์นี้",
+      keyHint: "เคล็ดลับ: กด 1–4 เพื่อตอบ, ← เพื่อย้อนกลับ",
+      secondNoteRich: (name, tag) => "คุณมีกลิ่นอาย" + name + "อยู่ไม่น้อยเหมือนกัน: " + tag,
+      secondNoteGeneric: (name, pct) => "คุณยังเอียงไปทาง " + name + " ด้วย (" + pct + "%)",
+      customResultTag: "อันดับหนึ่งของคุณ",
+      builderCats: "4 หมวดหมู่ของคุณ",
+      builderQs: "คำถามของคุณ",
+      addQuestion: "＋ เพิ่มคำถาม",
+      removeQuestion: "ลบ",
+      builderHintInvalid: "กรอกชื่อหมวดหมู่ทั้ง 4 และคำถามให้ครบอย่างน้อย 3 ข้อ (คำถาม + คำตอบครบ 4 ช่อง) ก่อนเริ่ม",
+      catNamePlaceholder: n => "ชื่อหมวดหมู่ที่ " + n,
+      qPromptPlaceholder: "คำถาม",
+      optPlaceholder: n => "คำตอบสำหรับหมวดหมู่ที่ " + n,
+      toggleSound: "เปิด/ปิดเสียง",
+      toggleTheme: "สลับธีมสว่าง/มืด",
+      closeModal: "ปิด",
+      removeFromTeam: "นำออกจากทีม"
+    },
+    es: {
+      brand: "cuestionario de tipos de programador",
+      titlePre: "¿Qué tipo de programador eres, ",
+      titleHl: "en realidad?",
+      lede: "Olvida el currículum. Responde algunas preguntas rápidas y cotidianas, y te mostraremos con qué tipo de programador encajas más — con una gráfica divertida al final.",
+      modeQuick: "⚡ Rápido",
+      modeQuickSub: "9 preguntas, ~1 min",
+      modeFull: "🧭 Completo",
+      modeFullSub: "18 preguntas, ~3 min",
+      modeCustom: "🎛️ Personalizado",
+      modeCustomSub: "Crea tu propio cuestionario",
+      pillsQuick: ["🕒 ~1 min", "❓ 9 preguntas", "✨ 9 tipos"],
+      pillsFull: ["🕒 ~3 min", "❓ 18 preguntas", "✨ 9 tipos"],
+      start: "Empezar el cuestionario →",
+      startCustom: "Empezar cuestionario personalizado →",
+      chips: ["📊 Científico de Datos", "🎮 Desarrollador de Videojuegos", "🛠️ Desarrollador Full Stack", "🎨 Diseñador UX/UI", "🤖 Ingeniero en Robótica", "☁️ DevOps / Cloud", "📱 Desarrollador Móvil", "🔒 Ingeniero de Seguridad", "🐞 QA / Pruebas"],
+      chipHint: "Toca un tipo para ver una vista previa",
+      legendTrigger: "Ver los 9 tipos de un vistazo →",
+      legendTitle: "Todos los tipos de desarrollador",
+      questionLabel: n => "Pregunta " + n,
+      back: "← Atrás",
+      reviewEyebrow: "Esto es lo que elegiste",
+      seeResult: "Ver mi resultado →",
+      editAnswers: "← Volver a editar respuestas",
+      resultEyebrow: "Tu resultado",
+      posTitle: "✅ Donde destacas",
+      negTitle: "⚠️ Algo a tener en cuenta",
+      tabStrengths: "Fortalezas",
+      tabCareer: "Carrera",
+      tabFun: "Curiosidades",
+      rolesLabel: "Puestos de trabajo",
+      skillsLabel: "Habilidades para desarrollar",
+      chartLabel: "Cómo coincidiste con cada tipo",
+      characterLabel: "Si fueras un personaje…",
+      fitLabel: "Dónde encajarías a la perfección",
+      teamLabel: "Modo equipo",
+      teamAdd: "+ Añadir al equipo",
+      teamEmpty: "Añade compañeros para ver la mezcla de tu equipo.",
+      teamAllSame: name => "¡Todos son " + name + "! Misma mentalidad, el doble de resultados.",
+      teamAllDiff: "Cada miembro del equipo aporta algo distinto — ¡gran variedad!",
+      teamMix: (u,t) => "Buena mezcla — " + u + " tipos distintos entre " + t + " personas.",
+      teamComparePair: (you, youTrait, friend, friendTrait) => "Tú eres " + you + " — " + youTrait + ". La otra persona es " + friend + " — " + friendTrait + ". Suena a un buen equipo.",
+      sessionTrail: "Tus resultados en esta sesión",
+      shareBtn: "🔗 Compartir",
+      downloadBtn: "🖼️ Descargar imagen",
+      shareCopied: "¡Copiado al portapapeles!",
+      retake: "↻ Volver a intentarlo",
+      hint: "Solo por diversión — la mayoría de los programadores son una mezcla de varios de estos.",
+      mixed: (p1, pct1, p2, pct2) => "Sobre todo " + p1 + " (" + pct1 + "%), con bastante de " + p2 + " (" + pct2 + "%).",
+      tieNote: (arr) => arr.length === 2
+        ? "¡Hay un empate entre " + arr[0] + " y " + arr[1] + "!"
+        : "¡Hay un empate entre " + arr.slice(0, -1).join(', ') + ' y ' + arr[arr.length - 1] + '!',
+      whyLabel: "Por qué obtuviste este resultado",
+      keyHint: "Consejo: pulsa 1–4 para responder, ← para volver",
+      secondNoteRich: (name, tag) => "También tienes energía de " + name + ": " + tag,
+      secondNoteGeneric: (name, pct) => "También te inclinaste hacia " + name + " (" + pct + "%).",
+      customResultTag: "Tu mejor coincidencia",
+      builderCats: "Tus 4 categorías",
+      builderQs: "Tus preguntas",
+      addQuestion: "＋ Añadir pregunta",
+      removeQuestion: "Eliminar",
+      builderHintInvalid: "Completa los 4 nombres de categoría y al menos 3 preguntas completas (pregunta + las 4 respuestas) antes de empezar.",
+      catNamePlaceholder: n => "Nombre de categoría " + n,
+      qPromptPlaceholder: "Texto de la pregunta",
+      optPlaceholder: n => "Respuesta para la categoría " + n,
+      toggleSound: "Activar o desactivar sonido",
+      toggleTheme: "Cambiar tema claro u oscuro",
+      closeModal: "Cerrar",
+      removeFromTeam: "Quitar del equipo"
+    },
+    zh: {
+      brand: "程序员类型测试",
+      titlePre: "你到底是哪种类型的程序员？",
+      titleHl: "",
+      lede: "别管简历了。回答几个简单的日常问题,我们会告诉你最符合哪种程序员类型 —— 最后还有一张有趣的图表。",
+      modeQuick: "⚡ 快速版",
+      modeQuickSub: "9 题, 约1分钟",
+      modeFull: "🧭 完整版",
+      modeFullSub: "18 题, 约3分钟",
+      modeCustom: "🎛️ 自定义",
+      modeCustomSub: "创建你自己的测试",
+      pillsQuick: ["🕒 约1分钟", "❓ 9 道题", "✨ 9 种类型"],
+      pillsFull: ["🕒 约3分钟", "❓ 18 道题", "✨ 9 种类型"],
+      start: "开始测试 →",
+      startCustom: "开始自定义测试 →",
+      chips: ["📊 数据科学家", "🎮 游戏开发者", "🛠️ 全栈开发者", "🎨 UX/UI 设计师", "🤖 机器人工程师", "☁️ DevOps / 云工程师", "📱 移动开发者", "🔒 安全工程师", "🐞 QA / 测试工程师"],
+      chipHint: "点击查看该类型的介绍",
+      legendTrigger: "一览全部 9 种类型 →",
+      legendTitle: "全部开发者类型",
+      questionLabel: n => "第 " + n + " 题",
+      back: "← 上一题",
+      reviewEyebrow: "这是你选择的答案",
+      seeResult: "查看我的结果 →",
+      editAnswers: "← 返回修改答案",
+      resultEyebrow: "你的结果",
+      posTitle: "✅ 你的优势",
+      negTitle: "⚠️ 需要注意的地方",
+      tabStrengths: "优势",
+      tabCareer: "职业",
+      tabFun: "趣味",
+      rolesLabel: "相关职位",
+      skillsLabel: "值得学习的技能",
+      chartLabel: "你与每种类型的匹配程度",
+      characterLabel: "如果你是一个角色…",
+      fitLabel: "适合你大展身手的地方",
+      teamLabel: "团队模式",
+      teamAdd: "+ 加入团队",
+      teamEmpty: "添加队友以查看团队的类型分布。",
+      teamAllSame: name => "大家都是" + name + "！想法一致,产出翻倍！",
+      teamAllDiff: "每位队友都带来了不同的特质 —— 组合很棒！",
+      teamMix: (u,t) => "不错的组合 —— " + t + " 人中有 " + u + " 种不同类型。",
+      teamComparePair: (you, youTrait, friend, friendTrait) => "你是" + you + " —— " + youTrait + "；对方是" + friend + " —— " + friendTrait + "。听起来是很棒的搭档。",
+      sessionTrail: "本次的历史结果",
+      shareBtn: "🔗 分享",
+      downloadBtn: "🖼️ 下载图片",
+      shareCopied: "已复制到剪贴板！",
+      retake: "↻ 再测一次",
+      hint: "纯属娱乐 —— 大多数程序员其实是这些类型的混合体。",
+      mixed: (p1, pct1, p2, pct2) => "主要是" + p1 + "（" + pct1 + "%）,同时也有不少" + p2 + "的特质（" + pct2 + "%）。",
+      tieNote: (arr) => arr.length === 2
+        ? arr[0] + "和" + arr[1] + "打成平手！"
+        : arr.slice(0, -1).join('、') + "和" + arr[arr.length - 1] + "打成平手！",
+      whyLabel: "为什么你会得到这个结果",
+      keyHint: "提示：按 1–4 作答，← 返回上一题",
+      secondNoteRich: (name, tag) => "你身上也有明显的" + name + "气质：" + tag,
+      secondNoteGeneric: (name, pct) => "你也偏向于" + name + "（" + pct + "%）。",
+      customResultTag: "你的最佳匹配",
+      builderCats: "你的 4 个分类",
+      builderQs: "你的问题",
+      addQuestion: "＋ 添加问题",
+      removeQuestion: "删除",
+      builderHintInvalid: "请先填写全部 4 个分类名称,并至少完成 3 道完整的问题(题目 + 全部 4 个答案),然后再开始。",
+      catNamePlaceholder: n => "分类 " + n + " 的名称",
+      qPromptPlaceholder: "问题内容",
+      optPlaceholder: n => "分类 " + n + " 的答案",
+      toggleSound: "开启或关闭声音",
+      toggleTheme: "切换浅色或深色主题",
+      closeModal: "关闭",
+      removeFromTeam: "从团队中移除"
+    }
+  };
+
+  const ARCHETYPES = {
+    data: {
+      glyph: "📊", color: "#FFB454",
+      chartLabel: { en: "Data", th: "ข้อมูล", es: "Datos", zh: "数据" },
+      funFacts: {
+        characters: ["Sherlock Holmes", "Dana Scully", "Hermione Granger"],
+        fit: { en: "You'd feel right at home at places like Netflix, Spotify, or NASA.", th: "คุณน่าจะเข้ากันได้ดีกับที่แบบ Netflix, Spotify หรือ NASA", es: "Encajarías perfecto en lugares como Netflix, Spotify o la NASA.", zh: "你在 Netflix、Spotify 或 NASA 这样的地方应该会如鱼得水。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="46" r="4" fill="currentColor" opacity="0.35"/><circle cx="42" cy="34" r="3.5" fill="currentColor" opacity="0.5"/><circle cx="20" cy="30" r="3" fill="currentColor" opacity="0.3"/><circle cx="46" cy="52" r="3" fill="currentColor" opacity="0.4"/><circle cx="33" cy="22" r="14" stroke="currentColor" stroke-width="5"/><line x1="43" y1="33" x2="58" y2="48" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>',
+      pairTrait: { en: "brings the analysis", th: "รับหน้าที่ด้านวิเคราะห์", es: "aporta el análisis", zh: "负责分析" },
+      strengths: { en: ["Great at spotting patterns others miss","Makes decisions based on evidence, not guesses","Naturally curious and thorough"], th: ["เก่งเรื่องมองเห็นแพทเทิร์นที่คนอื่นมองข้าม","ตัดสินใจจากข้อมูลจริง ไม่ใช่การเดา","อยากรู้อยากเห็นและละเอียดรอบคอบ"], es: ["Detectas patrones que otros pasan por alto","Tomas decisiones basadas en evidencia, no en suposiciones","Naturalmente curioso y minucioso"], zh: ["擅长发现别人忽略的规律","基于证据而非猜测做决定","天生好奇又细致"] },
+      watchouts: { en: ["Can get stuck 'still analyzing' instead of shipping","Might overlook the human side of a problem","Perfectionism can slow things down"], th: ["อาจติดอยู่กับการ 'วิเคราะห์ต่อ' จนไม่ยอมส่งงานสักที","อาจมองข้ามมุมมองด้านความรู้สึกของคน","ความสมบูรณ์แบบอาจทำให้งานช้าลง"], es: ["Puedes quedarte 'todavía analizando' en vez de entregar","Podrías pasar por alto el lado humano de un problema","El perfeccionismo puede frenar el avance"], zh: ["可能陷入'还在分析'而迟迟不交付","可能忽略问题背后的人性层面","追求完美可能拖慢进度"] },
+      roles: { en: ["Data Analyst","Machine Learning Engineer","Data Scientist"], th: ["นักวิเคราะห์ข้อมูล","วิศวกร Machine Learning","นักวิทยาศาสตร์ข้อมูล"], es: ["Analista de Datos","Ingeniero de Machine Learning","Científico de Datos"], zh: ["数据分析师","机器学习工程师","数据科学家"] },
+      skills: { en: ["Python","SQL","Statistics"], th: ["Python","SQL","สถิติ"], es: ["Python","SQL","Estadística"], zh: ["Python","SQL","统计学"] },
+      en: { name: "Data Scientist", tag: "You turn numbers into answers.",
+        desc: "You're the one who actually wants to know why something happened, not just that it did. Patterns and 'wait, that's weird' moments pull you in." },
+      th: { name: "นักวิทยาศาสตร์ข้อมูล", tag: "คุณเปลี่ยนตัวเลขให้เป็นคำตอบ",
+        desc: "คุณเป็นคนที่อยากรู้ว่าทำไมสิ่งนั้นถึงเกิดขึ้น ไม่ใช่แค่รู้ว่ามันเกิดขึ้น แพทเทิร์นและช่วงเวลาที่คิดว่า 'แปลกจัง' คือสิ่งที่คุณชอบ" },
+      es: { name: "Científico de Datos", tag: "Conviertes números en respuestas.",
+        desc: "Eres quien realmente quiere saber por qué pasó algo, no solo que pasó. Los patrones y los momentos de 'espera, eso es raro' te atraen." },
+      zh: { name: "数据科学家", tag: "你把数字变成答案。",
+        desc: "你是那种真正想知道\"为什么会发生\"而不只是\"发生了什么\"的人。规律和\"等等,这有点奇怪\"的瞬间总能吸引你。" },
+      character: { en: { name: "The Detective", blurb: "You'd be the one piecing together clues everyone else walked past, one data point at a time." }, th: { name: "นักสืบ", blurb: "คุณจะเป็นคนที่ปะติดปะต่อเบาะแสที่คนอื่นเดินผ่านไปเฉย ๆ ทีละชิ้นจนเห็นภาพรวม" }, es: { name: "El Detective", blurb: "Serías quien conecta las pistas que todos los demás pasaron por alto, un dato a la vez." }, zh: { name: "侦探", blurb: "你会是那个把大家忽略的线索一点点拼凑起来的人。" } }
+    },
+    game: {
+      glyph: "🎮", color: "#FF6B9D",
+      chartLabel: { en: "Game", th: "เกม", es: "Videojuegos", zh: "游戏" },
+      funFacts: {
+        characters: ["Willy Wonka", "Peter Pan", "Mario"],
+        fit: { en: "You'd fit right in at Nintendo, Riot Games, or Valve.", th: "คุณน่าจะเข้ากันได้ดีกับ Nintendo, Riot Games หรือ Valve", es: "Encajarías perfecto en Nintendo, Riot Games o Valve.", zh: "你在任天堂、Riot Games 或 Valve 应该会很合拍。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 34c0-6 5-10 11-10h18c6 0 11 4 11 10v14c0 6-4 9-8 9-3 0-5-1.5-7-4l-2-3h-6l-2 3c-2 2.5-4 4-7 4-4 0-8-3-8-9V34z" fill="currentColor"/><circle cx="29" cy="38" r="2.6" fill="white"/><circle cx="29" cy="46" r="2.6" fill="white"/><circle cx="25" cy="42" r="2.6" fill="white"/><circle cx="33" cy="42" r="2.6" fill="white"/><circle cx="51" cy="40" r="2.8" fill="white"/><circle cx="58" cy="44" r="2.8" fill="white"/><path d="M60 18l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="currentColor" opacity="0.7"/></svg>',
+      pairTrait: { en: "brings the fun", th: "รับหน้าที่ด้านความสนุก", es: "aporta la diversión", zh: "负责带来乐趣" },
+      strengths: { en: ["Makes experiences people actually enjoy","Sweats the small details that create delight","Creative under constraints"], th: ["สร้างประสบการณ์ที่คนใช้แล้วสนุกจริง ๆ","ใส่ใจรายละเอียดเล็ก ๆ ที่สร้างความประทับใจ","สร้างสรรค์ได้แม้มีข้อจำกัด"], es: ["Creas experiencias que la gente realmente disfruta","Cuidas los pequeños detalles que generan deleite","Creativo bajo restricciones"], zh: ["创造出人们真心喜爱的体验","关注能带来惊喜的小细节","在限制条件下依然有创意"] },
+      watchouts: { en: ["Can prioritize 'fun' over deadlines","Might avoid the less glamorous, technical grind","Scope can balloon chasing the perfect feel"], th: ["อาจให้ความสำคัญกับ 'ความสนุก' มากกว่ากำหนดเวลา","อาจเลี่ยงงานเทคนิคที่น่าเบื่อแต่จำเป็น","ขอบเขตงานอาจบานปลายเพราะไล่ตามความรู้สึกที่ 'ใช่'"], es: ["Puedes priorizar la 'diversión' sobre los plazos","Podrías evitar el trabajo técnico menos glamoroso","El alcance puede crecer persiguiendo la sensación perfecta"], zh: ["可能把'好玩'看得比截止日期更重要","可能回避不那么有趣但必要的技术工作","为了追求完美的感觉,范围可能不断扩大"] },
+      roles: { en: ["Gameplay Programmer","Game Designer","Technical Artist"], th: ["โปรแกรมเมอร์เกม","นักออกแบบเกม","Technical Artist"], es: ["Programador de Gameplay","Diseñador de Videojuegos","Artista Técnico"], zh: ["游戏程序员","游戏设计师","技术美术"] },
+      skills: { en: ["C++ / C#","Unity or Unreal","Game Design"], th: ["C++/C#","Unity หรือ Unreal","การออกแบบเกม"], es: ["C++ / C#","Unity o Unreal","Diseño de Juegos"], zh: ["C++/C#","Unity 或 Unreal","游戏设计"] },
+      en: { name: "Game Developer", tag: "You make things fun on purpose.",
+        desc: "You care about how something feels, not just how it works. Timing, surprise, and little sparks of delight are always on your mind." },
+      th: { name: "นักพัฒนาเกม", tag: "คุณทำให้สิ่งต่าง ๆ สนุกขึ้นโดยตั้งใจ",
+        desc: "คุณใส่ใจว่าสิ่งนั้น 'รู้สึก' อย่างไร ไม่ใช่แค่ว่ามันทำงานได้ไหม จังหวะ ความประหลาดใจ และความสนุกเล็ก ๆ คือสิ่งที่คุณคิดถึงเสมอ" },
+      es: { name: "Desarrollador de Videojuegos", tag: "Haces las cosas divertidas a propósito.",
+        desc: "Te importa cómo se siente algo, no solo cómo funciona. El ritmo, la sorpresa y las pequeñas chispas de deleite siempre están en tu mente." },
+      zh: { name: "游戏开发者", tag: "你会刻意让事情变得有趣。",
+        desc: "你在意某样东西\"感觉如何\",而不只是它是否能用。节奏、惊喜和那些小小的愉悦火花,一直都在你脑海里。" },
+      character: { en: { name: "The Trickster", blurb: "You'd turn every challenge into a game — and somehow make the hard part feel like play." }, th: { name: "นักเล่นกล", blurb: "คุณจะเปลี่ยนทุกความท้าทายให้กลายเป็นเกม และทำให้ส่วนที่ยากรู้สึกเหมือนเล่นสนุก" }, es: { name: "El Bromista", blurb: "Convertirías cada desafío en un juego, haciendo que la parte difícil se sienta como diversión." }, zh: { name: "捣蛋鬼", blurb: "你会把每一个挑战都变成一场游戏,让最难的部分也变得像玩耍一样。" } }
+    },
+    full: {
+      glyph: "🛠️", color: "#4D96FF",
+      chartLabel: { en: "Full Stack", th: "ฟูลสแตก", es: "Full Stack", zh: "全栈" },
+      funFacts: {
+        characters: ["Ron Swanson", "MacGyver", "Leslie Knope"],
+        fit: { en: "You'd feel at home at Shopify, Stripe, or Airbnb.", th: "คุณน่าจะรู้สึกเหมือนอยู่บ้านที่ Shopify, Stripe หรือ Airbnb", es: "Te sentirías como en casa en Shopify, Stripe o Airbnb.", zh: "你在 Shopify、Stripe 或 Airbnb 应该会很有归属感。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M46 20a12 12 0 00-15 15L14 52l6 6 17-17a12 12 0 0015-15l-7 7-6-2-2-6z" fill="currentColor"/><circle cx="56" cy="52" r="10" fill="currentColor" opacity="0.35"/><circle cx="56" cy="52" r="4" fill="white"/></svg>',
+      pairTrait: { en: "brings it all together", th: "รับหน้าที่ประกอบร่างทุกอย่าง", es: "lo une todo", zh: "负责把一切整合起来" },
+      strengths: { en: ["Comfortable owning a project end to end","Adapts quickly to whatever the job needs","Gets things actually shipped"], th: ["สบายใจที่จะดูแลโปรเจกต์ตั้งแต่ต้นจนจบ","ปรับตัวได้ไวไม่ว่างานจะต้องการอะไร","ทำให้งานเสร็จและถูกส่งออกจริง"], es: ["Cómodo liderando un proyecto de principio a fin","Se adapta rápido a lo que el trabajo necesite","Realmente logra entregar las cosas"], zh: ["能自如地负责项目的全流程","能快速适应工作的各种需求","真正把事情交付出来"] },
+      watchouts: { en: ["Might go a mile wide but not very deep","Can take on too much instead of delegating","Easy to skip specialization and polish"], th: ["อาจรู้กว้างแต่ไม่ลึกในบางเรื่อง","อาจแบกงานไว้เองมากไปแทนที่จะมอบหมาย","ง่ายที่จะข้ามความเชี่ยวชาญเฉพาะทางหรือความประณีต"], es: ["Puede saber un poco de todo pero no profundizar","Puede asumir demasiado en vez de delegar","Fácil pasar por alto la especialización y el pulido"], zh: ["可能样样懂一点但不够深入","可能自己扛下太多而不懂得分配","容易忽略专精和打磨的部分"] },
+      roles: { en: ["Full Stack Developer","Software Engineer","Product Engineer"], th: ["นักพัฒนาฟูลสแตก","วิศวกรซอฟต์แวร์","Product Engineer"], es: ["Desarrollador Full Stack","Ingeniero de Software","Ingeniero de Producto"], zh: ["全栈开发者","软件工程师","产品工程师"] },
+      skills: { en: ["JavaScript","APIs","Databases"], th: ["JavaScript","API","ฐานข้อมูล"], es: ["JavaScript","APIs","Bases de datos"], zh: ["JavaScript","API","数据库"] },
+      en: { name: "Full Stack Developer", tag: "You get things done, start to finish.",
+        desc: "You're comfortable jumping into any part of a project — planning, building, fixing. You'd rather ship something real than polish one piece forever." },
+      th: { name: "นักพัฒนาฟูลสแตก", tag: "คุณทำทุกอย่างให้เสร็จตั้งแต่ต้นจนจบ",
+        desc: "คุณสบายใจที่จะลงมือทำได้ทุกส่วนของโปรเจกต์ ทั้งวางแผน ลงมือทำ และแก้ปัญหา คุณอยากส่งมอบของจริงมากกว่าขัดเกลาชิ้นเดียวไปเรื่อย ๆ" },
+      es: { name: "Desarrollador Full Stack", tag: "Terminas las cosas, de principio a fin.",
+        desc: "Te sientes cómodo entrando a cualquier parte de un proyecto — planear, construir, arreglar. Prefieres entregar algo real antes que pulir una sola pieza para siempre." },
+      zh: { name: "全栈开发者", tag: "你会把事情从头到尾做完。",
+        desc: "你可以自如地参与项目的任何一部分 —— 规划、开发、修复。比起把某一小块打磨到极致,你更愿意真正交付出成果。" },
+      character: { en: { name: "The Builder", blurb: "You'd be the one who shows up with tools in hand and just starts building, piece by piece." }, th: { name: "ช่างก่อสร้าง", blurb: "คุณจะเป็นคนที่หยิบเครื่องมือมาแล้วลงมือสร้างทันที ทีละชิ้นจนเสร็จสมบูรณ์" }, es: { name: "El Constructor", blurb: "Serías quien llega con las herramientas en mano y simplemente empieza a construir, pieza por pieza." }, zh: { name: "建造者", blurb: "你会是那个拿起工具就动手,一砖一瓦把东西造出来的人。" } }
+    },
+    ux: {
+      glyph: "🎨", color: "#B892FF",
+      chartLabel: { en: "UX/UI", th: "UX/UI", es: "UX/UI", zh: "UX/UI" },
+      funFacts: {
+        characters: ["WALL-E", "Baymax", "Ted Lasso"],
+        fit: { en: "You'd fit right in at Apple, Figma, or IDEO.", th: "คุณน่าจะเข้ากันได้ดีกับ Apple, Figma หรือ IDEO", es: "Encajarías perfecto en Apple, Figma o IDEO.", zh: "你在 Apple、Figma 或 IDEO 应该会很合拍。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 56C24 46 18 38 18 29c0-7 5.5-12 12-12 5 0 8.5 2.5 10 6 1.5-3.5 5-6 10-6 6.5 0 12 5 12 12 0 9-6 17-22 27z" fill="currentColor"/><path d="M52 18l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="currentColor" opacity="0.6"/></svg>',
+      pairTrait: { en: "brings the polish", th: "รับหน้าที่ด้านความลื่นไหลของการใช้งาน", es: "aporta el pulido", zh: "负责打磨体验" },
+      strengths: { en: ["Spots confusing or frustrating moments instantly","Genuinely empathetic to how people feel","Turns complicated things into something simple"], th: ["สังเกตจุดที่ทำให้คนสับสนหรือหงุดหงิดได้ไว","เข้าใจความรู้สึกของผู้ใช้จริง ๆ","ทำให้เรื่องซับซ้อนกลายเป็นเรื่องง่าย"], es: ["Detecta al instante momentos confusos o frustrantes","Genuinamente empático con cómo se siente la gente","Convierte lo complicado en algo simple"], zh: ["能立刻察觉令人困惑或沮丧的瞬间","真正能共情用户的感受","把复杂的事情变得简单"] },
+      watchouts: { en: ["Can obsess over small details that don't matter much","Might struggle to defend decisions with hard data","Perfecting the feel can eat up the timeline"], th: ["อาจจดจ่อกับรายละเอียดเล็ก ๆ ที่ไม่ได้สำคัญมาก","อาจอธิบายการตัดสินใจด้วยข้อมูลจริงได้ยาก","การทำให้ 'รู้สึกถูกต้อง' อาจกินเวลามากไป"], es: ["Puede obsesionarse con detalles que no importan tanto","Puede costarle defender decisiones con datos concretos","Perfeccionar la sensación puede consumir el cronograma"], zh: ["可能过度纠结不太重要的小细节","可能难以用确凿数据为决定辩护","为了打磨体验可能拖慢进度"] },
+      roles: { en: ["UX Designer","UI Designer","Product Designer"], th: ["นักออกแบบ UX","นักออกแบบ UI","Product Designer"], es: ["Diseñador UX","Diseñador UI","Diseñador de Producto"], zh: ["UX 设计师","UI 设计师","产品设计师"] },
+      skills: { en: ["Figma","User Research","Prototyping"], th: ["Figma","การวิจัยผู้ใช้","การทำโปรโตไทป์"], es: ["Figma","Investigación de usuarios","Prototipado"], zh: ["Figma","用户研究","原型设计"] },
+      en: { name: "UX/UI Designer", tag: "You notice what everyone else walks past.",
+        desc: "A confusing button, an awkward layout, a step that shouldn't be there — these bother you. You care how something feels to use." },
+      th: { name: "นักออกแบบ UX/UI", tag: "คุณสังเกตเห็นสิ่งที่คนอื่นมองข้าม",
+        desc: "ปุ่มที่งง เลย์เอาต์ที่แปลก ขั้นตอนที่ไม่ควรมี สิ่งเล็ก ๆ พวกนี้กวนใจคุณ คุณใส่ใจว่าการใช้งานรู้สึกอย่างไร" },
+      es: { name: "Diseñador UX/UI", tag: "Notas lo que todos los demás pasan por alto.",
+        desc: "Un botón confuso, un diseño incómodo, un paso que no debería estar ahí — eso te molesta. Te importa cómo se siente usar algo." },
+      zh: { name: "UX/UI 设计师", tag: "你能注意到别人都会忽略的地方。",
+        desc: "一个令人困惑的按钮、一个别扭的布局、一个不该存在的步骤 —— 这些都会让你在意。你关心的是使用体验本身。" },
+      character: { en: { name: "The Empath", blurb: "You'd know what a room needs before anyone says a word out loud." }, th: { name: "ผู้เข้าใจหัวใจคน", blurb: "คุณจะรู้ว่าห้องนี้ต้องการอะไร ก่อนที่ใครจะพูดออกมาสักคำ" }, es: { name: "El Empático", blurb: "Sabrías lo que necesita una sala antes de que nadie diga una palabra." }, zh: { name: "共情者", blurb: "你会在别人开口之前,就知道这个空间真正需要什么。" } }
+    },
+    robo: {
+      glyph: "🤖", color: "#2EC4B6",
+      chartLabel: { en: "Robotics", th: "หุ่นยนต์", es: "Robótica", zh: "机器人" },
+      funFacts: {
+        characters: ["Tony Stark", "Doc Brown", "Q (James Bond)"],
+        fit: { en: "You'd feel right at home at Boston Dynamics, iRobot, or DJI.", th: "คุณน่าจะรู้สึกเหมือนอยู่บ้านที่ Boston Dynamics, iRobot หรือ DJI", es: "Te sentirías como en casa en Boston Dynamics, iRobot o DJI.", zh: "你在波士顿动力（Boston Dynamics）、iRobot 或大疆（DJI）应该会很有归属感。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="34" y="16" width="12" height="30" rx="6" fill="currentColor"/><circle cx="40" cy="52" r="12" fill="currentColor"/><circle cx="40" cy="52" r="5" fill="white"/><rect x="20" y="48" width="10" height="8" rx="4" fill="currentColor" opacity="0.55"/><rect x="50" y="48" width="10" height="8" rx="4" fill="currentColor" opacity="0.55"/></svg>',
+      pairTrait: { en: "brings the hands-on build", th: "รับหน้าที่ด้านการลงมือสร้าง", es: "aporta la construcción práctica", zh: "负责动手搭建" },
+      strengths: { en: ["Thinks in real-world constraints, not just theory","Hands-on and comfortable building physical things","Persistent through trial and error"], th: ["คิดโดยคำนึงถึงข้อจำกัดของโลกจริง ไม่ใช่แค่ทฤษฎี","ลงมือทำและสร้างของจริงได้อย่างสบายใจ","อดทนลองผิดลองถูกได้เรื่อย ๆ"], es: ["Piensa en restricciones del mundo real, no solo en teoría","Práctico y cómodo construyendo cosas físicas","Persistente en el ensayo y error"], zh: ["从现实世界的限制出发思考,而不只是理论","动手能力强,喜欢制作实体的东西","在反复试错中保持耐心"] },
+      watchouts: { en: ["Hardware iteration is slow — can test patience","Might undervalue the software/UX side of a project","Easy to get absorbed in one stubborn technical problem"], th: ["การทดลองกับฮาร์ดแวร์ใช้เวลานาน อาจท้าทายความอดทน","อาจมองข้ามความสำคัญของซอฟต์แวร์หรือ UX","ง่ายที่จะจมอยู่กับปัญหาทางเทคนิคจุดเดียวนานเกินไป"], es: ["Iterar con hardware es lento — puede probar la paciencia","Puede subestimar el lado del software o UX de un proyecto","Fácil quedar absorto en un solo problema técnico terco"], zh: ["硬件迭代速度慢 —— 很考验耐心","可能低估软件或用户体验的重要性","容易长时间陷在一个棘手的技术问题里"] },
+      roles: { en: ["Robotics Engineer","Embedded Engineer","Mechatronics Engineer"], th: ["วิศวกรหุ่นยนต์","วิศวกร Embedded","วิศวกร Mechatronics"], es: ["Ingeniero en Robótica","Ingeniero de Sistemas Embebidos","Ingeniero en Mecatrónica"], zh: ["机器人工程师","嵌入式工程师","机电一体化工程师"] },
+      skills: { en: ["C / C++","Circuits","Control Systems"], th: ["C/C++","วงจรไฟฟ้า","ระบบควบคุม"], es: ["C / C++","Circuitos","Sistemas de control"], zh: ["C/C++","电路","控制系统"] },
+      en: { name: "Robotics Engineer", tag: "You like things you can actually touch.",
+        desc: "You're happiest when something you built moves, reacts, or does something in the real world. You'd rather build than just watch a screen." },
+      th: { name: "วิศวกรหุ่นยนต์", tag: "คุณชอบสิ่งที่จับต้องได้จริง",
+        desc: "คุณมีความสุขที่สุดเมื่อสิ่งที่สร้างขึ้นเคลื่อนไหวหรือทำงานได้จริงในโลกจริง คุณอยากลงมือสร้างมากกว่าดูแค่หน้าจอ" },
+      es: { name: "Ingeniero en Robótica", tag: "Te gustan las cosas que puedes tocar de verdad.",
+        desc: "Eres más feliz cuando algo que construiste se mueve, reacciona o hace algo en el mundo real. Prefieres construir antes que solo mirar una pantalla." },
+      zh: { name: "机器人工程师", tag: "你喜欢能真正触摸到的东西。",
+        desc: "当你造的东西能移动、能反应、能在现实世界里做点什么时,你最开心。比起只盯着屏幕,你更愿意动手把它造出来。" },
+      character: { en: { name: "The Tinkerer", blurb: "You'd be surrounded by gears and wires, always chasing 'what if this moved on its own?'" }, th: { name: "นักประดิษฐ์", blurb: "คุณจะอยู่ท่ามกลางเฟืองและสายไฟ ไล่ตามคำถามที่ว่า 'ถ้ามันขยับได้เองล่ะ?' อยู่เสมอ" }, es: { name: "El Inventor", blurb: "Estarías rodeado de engranajes y cables, persiguiendo siempre la pregunta '¿y si esto se moviera solo?'" }, zh: { name: "发明家", blurb: "你会被齿轮和电线围绕,一直追问'如果它能自己动起来会怎样?'" } }
+    },
+    devops: {
+      glyph: "☁️", color: "#6BCB77",
+      chartLabel: { en: "DevOps", th: "DevOps", es: "DevOps", zh: "DevOps" },
+      funFacts: {
+        characters: ["Alfred Pennyworth", "Scotty (Star Trek)", "Radar O'Reilly"],
+        fit: { en: "You'd fit right in at AWS, Google Cloud, or HashiCorp.", th: "คุณน่าจะเข้ากันได้ดีกับ AWS, Google Cloud หรือ HashiCorp", es: "Encajarías perfecto en AWS, Google Cloud o HashiCorp.", zh: "你在 AWS、Google Cloud 或 HashiCorp 应该会很合拍。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="40" r="14" stroke="currentColor" stroke-width="7"/><circle cx="50" cy="40" r="14" stroke="currentColor" stroke-width="7"/></svg>',
+      pairTrait: { en: "brings the reliability", th: "รับหน้าที่ด้านความเสถียร", es: "aporta la fiabilidad", zh: "负责保障系统稳定" },
+      strengths: { en: ["Keeps systems reliable and running smoothly","Thinks ahead about what could go wrong","Great at automating repetitive work"], th: ["ทำให้ระบบเสถียรและทำงานได้ราบรื่น","คิดล่วงหน้าถึงสิ่งที่อาจผิดพลาด","เก่งเรื่องทำงานซ้ำ ๆ ให้เป็นระบบอัตโนมัติ"], es: ["Mantiene los sistemas fiables y funcionando sin problemas","Piensa con anticipación en lo que podría salir mal","Excelente automatizando trabajo repetitivo"], zh: ["让系统保持稳定顺畅运行","提前想到可能出错的地方","擅长把重复性工作自动化"] },
+      watchouts: { en: ["Work can be invisible until something breaks","Might over-engineer for problems that don't exist yet","Can be overly cautious about shipping fast"], th: ["งานอาจไม่มีใครเห็นจนกว่าจะมีอะไรพัง","อาจออกแบบระบบซับซ้อนเกินไปสำหรับปัญหาที่ยังไม่เกิดขึ้น","อาจระมัดระวังมากไปจนชะลอการปล่อยงาน"], es: ["El trabajo puede ser invisible hasta que algo se rompe","Puede sobrediseñar para problemas que aún no existen","Puede ser excesivamente cauteloso al lanzar rápido"], zh: ["工作往往不被看见,直到出了问题","可能为尚不存在的问题过度设计","可能过于谨慎而拖慢发布节奏"] },
+      roles: { en: ["DevOps Engineer","Site Reliability Engineer","Cloud Engineer"], th: ["วิศวกร DevOps","วิศวกร SRE","วิศวกร Cloud"], es: ["Ingeniero DevOps","Ingeniero de Confiabilidad (SRE)","Ingeniero Cloud"], zh: ["DevOps 工程师","站点可靠性工程师（SRE）","云工程师"] },
+      skills: { en: ["CI/CD","Docker","Cloud Platforms"], th: ["CI/CD","Docker","แพลตฟอร์ม Cloud"], es: ["CI/CD","Docker","Plataformas Cloud"], zh: ["CI/CD","Docker","云平台"] },
+      en: { name: "DevOps / Cloud Engineer", tag: "You make sure everything keeps running.",
+        desc: "You care about reliability more than flash — automation, backups, smooth deployments. You'd rather build it once so it never breaks quietly." },
+      th: { name: "วิศวกร DevOps / Cloud", tag: "คุณทำให้ทุกอย่างทำงานได้อย่างราบรื่นตลอดเวลา",
+        desc: "คุณให้ความสำคัญกับความเสถียรมากกว่าความหวือหวา ทั้งระบบอัตโนมัติ การสำรองข้อมูล และการปล่อยงานที่ราบรื่น" },
+      es: { name: "Ingeniero DevOps / Cloud", tag: "Te aseguras de que todo siga funcionando.",
+        desc: "Te importa más la fiabilidad que el brillo — automatización, respaldos, despliegues sin problemas. Prefieres construirlo una vez para que nunca falle en silencio." },
+      zh: { name: "DevOps / 云工程师", tag: "你确保一切始终正常运转。",
+        desc: "比起表面光鲜,你更看重可靠性 —— 自动化、备份、顺畅的部署。你更愿意一次把系统搭建好,让它悄无声息地稳定运行。" },
+      character: { en: { name: "The Guardian", blurb: "You'd be the quiet one making sure the whole castle stays standing, even when no one's watching." }, th: { name: "ผู้พิทักษ์", blurb: "คุณจะเป็นคนเงียบ ๆ ที่คอยดูแลให้ปราสาททั้งหลังยังตั้งอยู่ได้ แม้ไม่มีใครมอง" }, es: { name: "El Guardián", blurb: "Serías quien, en silencio, se asegura de que todo el castillo siga en pie, aunque nadie esté mirando." }, zh: { name: "守护者", blurb: "你会是那个默默确保整座城堡屹立不倒的人,即使没有人在看。" } }
+    },
+    mobile: {
+      glyph: "📱", color: "#FF8C42",
+      chartLabel: { en: "Mobile", th: "มือถือ", es: "Móvil", zh: "移动端" },
+      funFacts: {
+        characters: ["Jason Bourne", "Ferris Bueller", "Dora the Explorer"],
+        fit: { en: "You'd feel at home at Uber, Instagram, or TikTok.", th: "คุณน่าจะรู้สึกเหมือนอยู่บ้านที่ Uber, Instagram หรือ TikTok", es: "Te sentirías como en casa en Uber, Instagram o TikTok.", zh: "你在 Uber、Instagram 或 TikTok 应该会很有归属感。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="26" y="14" width="22" height="38" rx="6" fill="currentColor"/><rect x="30" y="19" width="14" height="24" rx="2" fill="white" opacity="0.9"/><circle cx="37" cy="47" r="2" fill="white"/><path d="M56 40c0 8-9 18-9 18s-9-10-9-18a9 9 0 1 1 18 0z" fill="currentColor" opacity="0.5"/><circle cx="47" cy="40" r="3.5" fill="white"/></svg>',
+      pairTrait: { en: "brings the on-the-go access", th: "รับหน้าที่ด้านการใช้งานผ่านมือถือ", es: "aporta el acceso desde cualquier lugar", zh: "负责随时随地的可用性" },
+      strengths: { en: ["Thinks about real users on the go, not ideal conditions","Cares about speed and smoothness","Good at designing for small, constrained spaces"], th: ["คิดถึงผู้ใช้จริงที่กำลังเคลื่อนที่ ไม่ใช่แค่สภาพแวดล้อมในอุดมคติ","ใส่ใจเรื่องความเร็วและความลื่นไหล","ออกแบบเก่งในพื้นที่จำกัดของหน้าจอเล็ก ๆ"], es: ["Piensa en usuarios reales en movimiento, no en condiciones ideales","Se preocupa por la velocidad y la fluidez","Bueno diseñando para espacios pequeños y limitados"], zh: ["从真实、移动中的用户角度思考,而非理想环境","注重速度与流畅度","擅长在小而受限的空间里做设计"] },
+      watchouts: { en: ["Can get boxed in by platform rules and limits","Testing across devices can eat a lot of time","Might undervalue the backend powering the app"], th: ["อาจถูกจำกัดด้วยกฎและข้อจำกัดของแพลตฟอร์ม","การทดสอบข้ามอุปกรณ์หลายรุ่นอาจกินเวลามาก","อาจมองข้ามความสำคัญของระบบหลังบ้านที่รองรับแอป"], es: ["Puede quedar limitado por las reglas de la plataforma","Probar en muchos dispositivos puede consumir mucho tiempo","Puede subestimar el backend que sostiene la app"], zh: ["可能被平台规则和限制束缚","跨设备测试可能非常耗时","可能低估支撑应用运行的后端系统"] },
+      roles: { en: ["iOS Developer","Android Developer","Mobile Engineer"], th: ["นักพัฒนา iOS","นักพัฒนา Android","วิศวกรมือถือ"], es: ["Desarrollador iOS","Desarrollador Android","Ingeniero Móvil"], zh: ["iOS 开发者","Android 开发者","移动端工程师"] },
+      skills: { en: ["Swift or Kotlin","Mobile UI","App Performance"], th: ["Swift หรือ Kotlin","UI มือถือ","ประสิทธิภาพแอป"], es: ["Swift o Kotlin","UI Móvil","Rendimiento de apps"], zh: ["Swift 或 Kotlin","移动端 UI","应用性能优化"] },
+      en: { name: "Mobile Developer", tag: "You build for wherever people actually are.",
+        desc: "You think in thumbs and pockets — quick taps, small screens, apps people reach for without thinking. Fast and easy on a phone, or it's not done." },
+      th: { name: "นักพัฒนาแอปมือถือ", tag: "คุณสร้างสิ่งที่ใช้งานได้ทุกที่ที่คนอยู่",
+        desc: "คุณคิดแบบ 'นิ้วโป้งกับกระเป๋ากางเกง' แตะเร็ว หน้าจอเล็ก แอปที่คนหยิบใช้โดยไม่ต้องคิด ถ้าไม่เร็วและง่ายบนมือถือ ก็ยังไม่เสร็จดี" },
+      es: { name: "Desarrollador Móvil", tag: "Construyes para donde sea que la gente realmente esté.",
+        desc: "Piensas en pulgares y bolsillos — toques rápidos, pantallas pequeñas, apps que la gente usa sin pensar. Rápido y fácil en el móvil, o no está terminado." },
+      zh: { name: "移动开发者", tag: "你为人们真正所在的地方而开发。",
+        desc: "你习惯从\"拇指和口袋\"的角度思考 —— 快速点击、小屏幕、人们不假思索就会打开的应用。在手机上不快不方便,就等于没做完。" },
+      character: { en: { name: "The Messenger", blurb: "You'd always be in motion, delivering exactly what's needed right into someone's hand." }, th: { name: "ผู้ส่งสาร", blurb: "คุณจะเคลื่อนไหวอยู่เสมอ ส่งสิ่งที่ใช่มาถึงมือใครบางคนได้ทันเวลา" }, es: { name: "El Mensajero", blurb: "Siempre estarías en movimiento, entregando justo lo necesario directamente en la mano de alguien." }, zh: { name: "信使", blurb: "你总是在路上,把恰好需要的东西送到别人手中。" } }
+    },
+    security: {
+      glyph: "🔒", color: "#5B7FDE",
+      chartLabel: { en: "Security", th: "ปลอดภัย", es: "Seguridad", zh: "安全" },
+      funFacts: {
+        characters: ["Batman", "Nick Fury", "James Bond"],
+        fit: { en: "You'd fit right in at Cloudflare, CrowdStrike, or Palo Alto Networks.", th: "คุณน่าจะเข้ากันได้ดีกับ Cloudflare, CrowdStrike หรือ Palo Alto Networks", es: "Encajarías perfecto en Cloudflare, CrowdStrike o Palo Alto Networks.", zh: "你在 Cloudflare、CrowdStrike 或 Palo Alto Networks 应该会很合拍。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 14l20 7v16c0 15-9 24-20 29-11-5-20-14-20-29V21z" fill="currentColor"/><rect x="32" y="38" width="16" height="13" rx="3" fill="white"/><path d="M35 38v-5a5 5 0 0 1 10 0v5" stroke="white" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>',
+      pairTrait: { en: "brings the safety check", th: "รับหน้าที่ด้านความปลอดภัย", es: "aporta la revisión de seguridad", zh: "负责安全把关" },
+      strengths: { en: ["Spots risks before they become real problems","Protects trust and keeps things safe","Thinks like an attacker to defend better"], th: ["มองเห็นความเสี่ยงก่อนที่มันจะกลายเป็นปัญหาจริง","ปกป้องความไว้ใจและความปลอดภัยของระบบ","คิดแบบผู้โจมตีเพื่อป้องกันได้ดีขึ้น"], es: ["Detecta riesgos antes de que se conviertan en problemas reales","Protege la confianza y mantiene las cosas seguras","Piensa como un atacante para defender mejor"], zh: ["能在风险变成真正的问题之前就发现它","守护信任,保障系统安全","像攻击者一样思考,以便更好地防御"] },
+      watchouts: { en: ["Can slow down launches with extra caution","Might come across as overly skeptical or blocking","Easy to focus on threats and miss the user experience"], th: ["อาจทำให้การปล่อยงานช้าลงเพราะความระมัดระวังที่มากไป","อาจดูขี้ระแวงหรือคอยขวางมากเกินไปในสายตาคนอื่น","อาจโฟกัสที่ภัยคุกคามจนมองข้ามประสบการณ์ผู้ใช้"], es: ["Puede retrasar lanzamientos con precaución extra","Puede parecer excesivamente escéptico o un obstáculo","Fácil enfocarse en amenazas y perder de vista la experiencia del usuario"], zh: ["过度谨慎可能拖慢发布进度","可能显得过于多疑或爱挡路","可能只关注威胁而忽略了用户体验"] },
+      roles: { en: ["Security Engineer","Penetration Tester","AppSec Engineer"], th: ["วิศวกรความปลอดภัย","Penetration Tester","AppSec Engineer"], es: ["Ingeniero de Seguridad","Pentester","Ingeniero de Seguridad de Aplicaciones"], zh: ["安全工程师","渗透测试工程师","应用安全工程师"] },
+      skills: { en: ["Threat Modeling","Networking","Secure Coding"], th: ["Threat Modeling","เครือข่าย","การเขียนโค้ดอย่างปลอดภัย"], es: ["Modelado de amenazas","Redes","Codificación segura"], zh: ["威胁建模","网络","安全编码"] },
+      en: { name: "Security Engineer", tag: "You think about what could go wrong before it does.",
+        desc: "You notice the unlocked door everyone else walks past. Trust is something you build carefully — check now, rather than clean up later." },
+      th: { name: "วิศวกรความปลอดภัย", tag: "คุณคิดถึงสิ่งที่อาจผิดพลาดก่อนที่มันจะเกิดขึ้นจริง",
+        desc: "คุณสังเกตเห็นประตูที่ไม่ได้ล็อกที่คนอื่นเดินผ่านไปเฉย ๆ ความไว้ใจเป็นสิ่งที่คุณสร้างอย่างระมัดระวังเสมอ" },
+      es: { name: "Ingeniero de Seguridad", tag: "Piensas en lo que podría salir mal antes de que pase.",
+        desc: "Notas la puerta sin llave que todos los demás pasan de largo. La confianza es algo que construyes con cuidado — prefieres revisar ahora antes que limpiar el desastre después." },
+      zh: { name: "安全工程师", tag: "你会在问题发生之前就想到可能出的错。",
+        desc: "别人都走过去的那扇没锁的门,你会注意到。信任是需要小心建立的东西 —— 你宁愿现在多检查一遍,也不想事后收拾烂摊子。" },
+      character: { en: { name: "The Sentinel", blurb: "You'd be the watchful one who spots the crack in the wall before anyone else even looks." }, th: { name: "ผู้เฝ้าระวัง", blurb: "คุณจะเป็นคนช่างสังเกตที่เห็นรอยร้าวบนกำแพงก่อนใครจะมองเห็นด้วยซ้ำ" }, es: { name: "El Centinela", blurb: "Serías quien nota la grieta en el muro antes de que nadie más la vea." }, zh: { name: "哨兵", blurb: "你会是那个在别人发现之前,就注意到墙上裂缝的人。" } }
+    },
+    qa: {
+      glyph: "🐞", color: "#FF6B6B",
+      chartLabel: { en: "QA", th: "QA", es: "QA", zh: "QA" },
+      funFacts: {
+        characters: ["Adrian Monk", "Hercule Poirot", "Columbo"],
+        fit: { en: "You'd feel right at home at Microsoft, Atlassian, or BrowserStack.", th: "คุณน่าจะรู้สึกเหมือนอยู่บ้านที่ Microsoft, Atlassian หรือ BrowserStack", es: "Te sentirías como en casa en Microsoft, Atlassian o BrowserStack.", zh: "你在 Microsoft、Atlassian 或 BrowserStack 应该会很有归属感。" }
+      },
+      icon: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="16" width="34" height="42" rx="6" fill="currentColor" opacity="0.85"/><path d="M25 27h20M25 35h20M25 43h12" stroke="white" stroke-width="3.5" stroke-linecap="round"/><circle cx="54" cy="52" r="11" fill="white" stroke="currentColor" stroke-width="5"/><path d="M49 52l3.5 3.5L59 48" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      pairTrait: { en: "brings the quality check", th: "รับหน้าที่ด้านการตรวจสอบคุณภาพ", es: "aporta el control de calidad", zh: "负责质量把关" },
+      strengths: { en: ["Finds problems before users ever see them","Extremely thorough and detail-oriented","Keeps quality high under pressure"], th: ["เจอปัญหาก่อนที่ผู้ใช้จะเจอ","ละเอียดและใส่ใจรายละเอียดสุด ๆ","รักษามาตรฐานคุณภาพได้แม้อยู่ภายใต้แรงกดดัน"], es: ["Encuentra problemas antes de que los usuarios los vean","Extremadamente minucioso y atento al detalle","Mantiene la calidad alta bajo presión"], zh: ["能在用户之前发现问题","极其细致,注重细节","在压力下依然保持高质量标准"] },
+      watchouts: { en: ["Can be seen as slowing the team down","Might focus on edge cases nobody will hit","Hard to feel satisfied — there's always one more bug"], th: ["อาจถูกมองว่าทำให้ทีมช้าลง","อาจโฟกัสกับเคสที่แทบไม่มีใครเจอจริง","ยากที่จะรู้สึกพอใจ เพราะมักมีบั๊กอีกตัวเสมอ"], es: ["Puede parecer que frena al equipo","Puede enfocarse en casos límite que nadie encontrará","Difícil sentirse satisfecho — siempre hay un error más"], zh: ["可能被认为拖慢了团队进度","可能过度关注几乎不会发生的边缘情况","很难感到满足 —— 总觉得还有一个 bug 没找到"] },
+      roles: { en: ["QA Engineer","Test Automation Engineer","SDET"], th: ["วิศวกร QA","วิศวกร Test Automation","SDET"], es: ["Ingeniero de QA","Ingeniero de Automatización de Pruebas","SDET"], zh: ["QA 工程师","测试自动化工程师","SDET"] },
+      skills: { en: ["Test Design","Automation Tools","Debugging"], th: ["การออกแบบเทสต์","เครื่องมืออัตโนมัติ","การดีบัก"], es: ["Diseño de pruebas","Herramientas de automatización","Depuración"], zh: ["测试设计","自动化工具","调试"] },
+      en: { name: "QA / Test Engineer", tag: "You find what everyone else missed.",
+        desc: "You try to break things on purpose, before anyone else can. Careful, thorough, and a little suspicious of anything that 'should just work.'" },
+      th: { name: "วิศวกร QA / ทดสอบระบบ", tag: "คุณเจอสิ่งที่คนอื่นมองข้าม",
+        desc: "คุณเป็นคนที่พยายามทำให้สิ่งต่าง ๆ พังก่อนใคร เพื่อเช็คให้ชัวร์ ละเอียด รอบคอบ และแอบสงสัยเสมอกับอะไรที่ 'ควรจะใช้ได้เลย'" },
+      es: { name: "Ingeniero de QA / Pruebas", tag: "Encuentras lo que todos los demás pasaron por alto.",
+        desc: "Intentas romper las cosas a propósito, antes de que nadie más pueda. Cuidadoso, minucioso, y un poco desconfiado de todo aquello que 'debería simplemente funcionar'." },
+      zh: { name: "QA / 测试工程师", tag: "你能发现别人都漏掉的问题。",
+        desc: "你会在别人之前主动尝试把东西弄坏。细心、彻底,对任何\"应该没问题\"的东西都会保持一丝怀疑 —— 因为你知道事实并非总是如此。" },
+      character: { en: { name: "The Skeptic", blurb: "You'd poke, prod, and question everything twice before it's ever allowed to pass." }, th: { name: "ผู้ช่างสงสัย", blurb: "คุณจะจิ้ม แหย่ และตั้งคำถามกับทุกอย่างซ้ำสองรอบ ก่อนจะยอมให้มันผ่านไปได้" }, es: { name: "El Escéptico", blurb: "Presionarías, cuestionarías y revisarías todo dos veces antes de dejarlo pasar." }, zh: { name: "怀疑论者", blurb: "你会反复戳一戳、问一问,确认一切没问题才放行。" } }
+    }
+  };
+
+  const TYPE_ORDER = ['data','game','full','ux','robo','devops','mobile','security','qa'];
+
+  const CUSTOM_PALETTE = ['#FFB454','#FF6B9D','#4D96FF','#B892FF'];
+
+  const QUESTIONS = [
+    { types:["data","game","full","ux"],
+      en:{ q:"How do you like to spend a free afternoon?", opts:["Look into something that's been bugging me","Play a video game for hours","Finish a task I've put off","Reorganize my room"] },
+      th:{ q:"เวลาว่างในวันหยุด คุณชอบทำอะไร?", opts:["หาคำตอบเรื่องที่ค้างคาใจ","เล่นเกมยาว ๆ","ทำงานที่ค้างไว้ให้เสร็จ","จัดห้องใหม่"] } },
+    { types:["robo","devops","mobile","security"],
+      en:{ q:"Something in your house stops working. First move?", opts:["Take it apart to see what's wrong","Check if it just needs a reset or update","Look it up on your phone right away","Make sure nothing unsafe happened first"] },
+      th:{ q:"ของในบ้านเสียกะทันหัน คุณจะทำอะไรก่อน?", opts:["แกะออกมาดูว่าตรงไหนเสีย","เช็กก่อนว่าแค่รีเซ็ตหรืออัปเดตก็พอไหม","หาข้อมูลจากมือถือทันที","เช็กก่อนว่ามีอะไรไม่ปลอดภัยหรือเปล่า"] } },
+    { types:["qa","data","game","full"],
+      en:{ q:"Before trying a new recipe, you...", opts:["Read it through twice to check for mistakes","Look up reviews and ratings first","Pick it because it sounds fun to make","Just go for it and adjust as you cook"] },
+      th:{ q:"ก่อนจะลองทำสูตรอาหารใหม่ คุณจะ...?", opts:["อ่านทวนสองรอบเพื่อเช็กว่าไม่มีอะไรผิด","หารีวิวและคะแนนก่อน","เลือกเพราะแค่ดูสนุกที่จะทำ","ลงมือทำเลยแล้วค่อยปรับไปเรื่อย ๆ"] } },
+    { types:["ux","robo","devops","mobile"],
+      en:{ q:"Pick your ideal weekend project.", opts:["Redecorate or reorganize a room","Build or fix something with your hands","Set up something that runs on autopilot","Find a great new app and set it up perfectly"] },
+      th:{ q:"โปรเจกต์วันหยุดในฝันของคุณคืออะไร?", opts:["แต่งหรือจัดห้องใหม่","สร้างหรือซ่อมอะไรบางอย่างด้วยมือ","ตั้งค่าให้บางอย่างทำงานเองอัตโนมัติ","หาแอปดี ๆ มาตั้งค่าให้ลงตัว"] } },
+    { types:["security","qa","data","game"],
+      en:{ q:"A friend wants to buy something online. You'd tell them to...", opts:["Double-check the site is safe first","Read through the reviews carefully","Compare a few options side by side","Just get the one that looks the most fun"] },
+      th:{ q:"เพื่อนอยากซื้อของออนไลน์ คุณจะบอกให้เขา...?", opts:["เช็กก่อนว่าเว็บนี้ปลอดภัยไหม","อ่านรีวิวให้ละเอียดก่อน","เทียบตัวเลือกหลาย ๆ อันดู","เลือกอันที่ดูสนุกที่สุดไปเลย"] } },
+    { types:["full","ux","robo","devops"],
+      en:{ q:"What's the most satisfying feeling to you?", opts:["Finishing something, start to finish","Making something confusing feel simple","Building something that actually works","Knowing everything is running smoothly"] },
+      th:{ q:"อะไรทำให้คุณรู้สึกดีที่สุด?", opts:["ทำอะไรสักอย่างจนจบ","ทำให้เรื่องที่งงกลายเป็นเรื่องง่าย","สร้างของบางอย่างที่ใช้งานได้จริง","รู้ว่าทุกอย่างทำงานราบรื่นดี"] } },
+    { types:["mobile","security","qa","data"],
+      en:{ q:"Pick a habit you actually keep up.", opts:["Checking your phone first thing in the morning","Locking your door out of habit, every time","Double-checking things before you send them","Tracking something about your day"] },
+      th:{ q:"เลือกนิสัยที่คุณทำเป็นประจำ", opts:["หยิบมือถือมาเช็กทันทีตอนตื่นนอน","ล็อกประตูจนเป็นนิสัย ทุกครั้ง","เช็กซ้ำก่อนส่งอะไรออกไปเสมอ","จดหรือติดตามอะไรบางอย่างเกี่ยวกับวันของตัวเอง"] } },
+    { types:["game","full","ux","robo"],
+      en:{ q:"Pick your role in a group project.", opts:["Keep things fun","Make sure it actually gets done","Make sure everyone understands the plan","Build the model or prototype"] },
+      th:{ q:"ในงานกลุ่ม คุณรับบทบาทไหน?", opts:["คนทำให้บรรยากาศสนุก","คนที่ทำให้งานเสร็จจริง ๆ","คนที่ทำให้ทุกคนเข้าใจแผนงาน","คนสร้างโมเดลหรือต้นแบบ"] } },
+    { types:["devops","mobile","security","qa"],
+      en:{ q:"What bugs you the most?", opts:["When something breaks and nobody notices right away","When you can't do something quickly from your phone","When something feels unsafe or untrustworthy","When something wasn't checked before it went out"] },
+      th:{ q:"อะไรที่กวนใจคุณที่สุด?", opts:["เวลาที่บางอย่างพังแล้วไม่มีใครรู้ทันที","เวลาที่ทำอะไรจากมือถือไม่ได้เร็วอย่างที่ควร","เวลาที่รู้สึกว่าบางอย่างไม่ปลอดภัยหรือไว้ใจไม่ได้","เวลาที่บางอย่างไม่ถูกตรวจสอบก่อนปล่อยออกไป"] } },
+    { types:["data","game","full","ux"],
+      en:{ q:"Planning a trip with friends — what's your job?", opts:["Find the best deal","Plan a fun surprise","Handle everything yourself","Make sure the plan actually works for everyone"] },
+      th:{ q:"วางแผนเที่ยวกับเพื่อน คุณรับหน้าที่อะไร?", opts:["หาราคาที่คุ้มที่สุด","วางแผนเซอร์ไพรส์สนุก ๆ","จัดการทุกอย่างเอง","เช็กให้แน่ใจว่าแผนเหมาะกับทุกคนจริง ๆ"] } },
+    { types:["robo","devops","mobile","security"],
+      en:{ q:"Pick a superpower for everyday life.", opts:["Fix or build anything with your hands","Make sure nothing ever breaks","Get anything done instantly from your phone","Instantly know if something's safe or not"] },
+      th:{ q:"อยากมีพลังพิเศษอะไรในชีวิตประจำวัน?", opts:["ซ่อมหรือสร้างอะไรก็ได้ด้วยมือ","ทำให้ไม่มีอะไรพังอีกเลย","ทำทุกอย่างเสร็จได้ทันทีจากมือถือ","รู้ทันทีว่าอะไรปลอดภัยหรือไม่"] } },
+    { types:["qa","data","game","full"],
+      en:{ q:"What's a good gift to give someone?", opts:["Something you tested and know they'll like","Something based on what they really need","Something fun and a little unexpected","Something useful they'll actually use"] },
+      th:{ q:"ของขวัญแบบไหนที่คุณว่าดี?", opts:["ของที่คุณลองแล้วว่าเขาต้องชอบแน่ ๆ","ของที่ตรงกับสิ่งที่เขาต้องการจริง ๆ","ของที่สนุกและเซอร์ไพรส์นิดหน่อย","ของที่มีประโยชน์และได้ใช้จริง"] } },
+    { types:["ux","robo","devops","mobile"],
+      en:{ q:"A friend's app is confusing them. What do you do?", opts:["Show them exactly what's confusing","Ask if it's actually a hardware problem","Check if it just needs an update","Find a better app for them instead"] },
+      th:{ q:"เพื่อนงงกับแอปที่ใช้ยาก คุณจะทำอะไร?", opts:["ชี้ให้ดูว่าตรงไหนที่งง","ถามว่าอาจเป็นปัญหาฮาร์ดแวร์หรือเปล่า","เช็กว่าแค่ต้องอัปเดตหรือเปล่า","หาแอปที่ดีกว่าให้เขาแทน"] } },
+    { types:["security","qa","data","game"],
+      en:{ q:"What feels the most satisfying to you?", opts:["Knowing something is safe and protected","Catching a mistake before it becomes a problem","Finding a pattern in something confusing","Making someone laugh"] },
+      th:{ q:"อะไรทำให้คุณรู้สึกดีที่สุด?", opts:["รู้ว่าบางอย่างปลอดภัยและได้รับการปกป้องดี","จับข้อผิดพลาดได้ก่อนที่จะกลายเป็นปัญหา","เจอแพทเทิร์นในเรื่องที่งง ๆ","ทำให้คนอื่นหัวเราะ"] } },
+    { types:["full","ux","robo","devops"],
+      en:{ q:"Pick a class you liked in school.", opts:["Any class where you built a real project","Art","Shop class","Anything with checklists and systems"] },
+      th:{ q:"วิชาไหนที่คุณชอบตอนเรียน?", opts:["วิชาที่ได้ลงมือสร้างโปรเจกต์จริง","ศิลปะ","วิชาช่าง","วิชาที่มีระบบและเช็กลิสต์เยอะ ๆ"] } },
+    { types:["mobile","security","qa","data"],
+      en:{ q:"What's always in your pocket or bag?", opts:["Your phone, always within reach","Your keys — you check for them constantly","A list of things you still need to double-check","A notebook or app to jot things down"] },
+      th:{ q:"อะไรที่คุณพกติดตัวตลอด?", opts:["มือถือ อยู่ใกล้มือเสมอ","กุญแจ ที่คุณเช็กอยู่บ่อย ๆ","ลิสต์สิ่งที่ยังต้องเช็กซ้ำ","สมุดหรือแอปจดบันทึก"] } },
+    { types:["game","full","ux","robo"],
+      en:{ q:"What kind of surprise would you love to plan?", opts:["A surprise party nobody sees coming","A whole day planned out perfectly","A gift that's exactly what they needed, wrapped just right","Something you built yourself"] },
+      th:{ q:"อยากวางแผนเซอร์ไพรส์แบบไหนให้ใครสักคน?", opts:["ปาร์ตี้เซอร์ไพรส์ที่ไม่มีใครคาดคิด","วันที่วางแผนไว้อย่างสมบูรณ์แบบทั้งวัน","ของขวัญที่ตรงใจเป๊ะ ห่อสวยด้วย","ของที่คุณสร้างขึ้นเอง"] } },
+    { types:["devops","mobile","security","qa"],
+      en:{ q:"What matters most when something goes live?", opts:["It keeps running without anyone babysitting it","People can use it from their phone anywhere","It's safe and nothing can go wrong","It was tested properly before anyone saw it"] },
+      th:{ q:"อะไรสำคัญที่สุดตอนปล่อยงานออกไปจริง?", opts:["มันทำงานต่อไปได้เองโดยไม่ต้องมีใครคอยดูแล","คนใช้งานจากมือถือที่ไหนก็ได้","มันปลอดภัยและไม่มีอะไรผิดพลาด","มันถูกทดสอบมาอย่างดีก่อนที่ใครจะเห็น"] } }
+  ];
+
+  /* ---------------- state ---------------- */
+
+  let activeCategories = [];   // [{id,name,emoji,color}]
+  let activeQuestions = [];    // [{types:[id,id,id,id], q, opts:[..]}]
+  let scores = {};
+  let current = 0;
+  let answers = [];            // [{type,label} | null]
+  let optionOrder = [];
+  let winnerId = null;
+  let sessionHistory = [];     // [{emoji,color}]
+
+  // custom builder state
+  let customCats = [
+    { emoji:'', name:'' },
+    { emoji:'', name:'' },
+    { emoji:'', name:'' },
+    { emoji:'', name:'' }
+  ];
+  let customQs = [
+    { prompt:'', opts:['','','',''] },
+    { prompt:'', opts:['','','',''] },
+    { prompt:'', opts:['','','',''] }
+  ];
+
+  const screenIntro   = document.getElementById('screen-intro');
+  const screenQuiz    = document.getElementById('screen-quiz');
+  const screenReview  = document.getElementById('screen-review');
+  const screenResults = document.getElementById('screen-results');
+
+  const qEyebrow = document.getElementById('q-eyebrow');
+  const qText    = document.getElementById('q-text');
+  const optionsEl = document.getElementById('options');
+  const qCurrent = document.getElementById('q-current');
+  const qTotal   = document.getElementById('q-total');
+  const progressFill = document.getElementById('progress-fill');
+  const backBtn = document.getElementById('back-btn');
+  const toastEl = document.getElementById('toast');
+
+  const LETTERS = ['A','B','C','D'];
+
+  function showScreen(name){
+    [screenIntro, screenQuiz, screenReview, screenResults].forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+  }
+
+  function catById(id){ return activeCategories.find(c => c.id === id); }
+
+  /* ---------------- sound + haptics ---------------- */
+
+  function ensureAudio(){
+    if(!audioCtx){
+      try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ audioCtx = null; }
+    }
+    return audioCtx;
+  }
+  function beep(freq, duration){
+    if(!soundOn) return;
+    const ctx = ensureAudio();
+    if(!ctx) return;
+    try{
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.09, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    }catch(e){}
+  }
+  function buzz(pattern){
+    if(!soundOn) return;
+    if(navigator.vibrate){ try{ navigator.vibrate(pattern); }catch(e){} }
+  }
+
+  document.getElementById('sound-toggle').addEventListener('click', function(){
+    soundOn = !soundOn;
+    this.textContent = soundOn ? '🔊' : '🔇';
+    this.setAttribute('aria-pressed', String(soundOn));
+    this.setAttribute('aria-label', soundOn ? 'Mute sound' : 'Unmute sound');
+    if(soundOn) beep(700, 0.06);
+  });
+
+  document.getElementById('theme-toggle').addEventListener('click', function(){
+    THEME = THEME === 'light' ? 'dark' : 'light';
+    document.getElementById('html-root').setAttribute('data-theme', THEME);
+    this.textContent = THEME === 'dark' ? '☀️' : '🌙';
+    this.setAttribute('aria-label', THEME === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  });
+
+  let toastTimer = null;
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+  }
+
+  /* ---------------- confetti ---------------- */
+
+  function fireConfetti(){
+    const layer = document.getElementById('confetti-layer');
+    const colors = activeCategories.map(c => c.color);
+    const pieces = 46;
+    for(let i = 0; i < pieces; i++){
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      const left = Math.random() * 100;
+      const duration = 2.2 + Math.random() * 1.4;
+      const delay = Math.random() * 0.4;
+      const color = colors[Math.floor(Math.random() * colors.length)] || '#B892FF';
+      el.style.left = left + 'vw';
+      el.style.background = color;
+      el.style.animationDuration = duration + 's';
+      el.style.animationDelay = delay + 's';
+      el.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+      layer.appendChild(el);
+      setTimeout(() => el.remove(), (duration + delay) * 1000 + 200);
+    }
+  }
+
+  /* ---------------- mode selection ---------------- */
+
+  function setMode(mode){
+    quizMode = mode;
+    ['quick','full','custom'].forEach(m => {
+      document.getElementById('mode-' + m).classList.toggle('active', m === mode);
+    });
+    document.getElementById('meta-row').style.display = mode === 'custom' ? 'none' : 'flex';
+    document.getElementById('builder-panel').style.display = mode === 'custom' ? 'block' : 'none';
+    document.getElementById('archetype-strip').style.display = mode === 'custom' ? 'none' : 'flex';
+    applyIntroMeta();
+    if(mode === 'custom') renderBuilder();
+  }
+
+  document.getElementById('mode-quick').addEventListener('click', () => setMode('quick'));
+  document.getElementById('mode-full').addEventListener('click', () => setMode('full'));
+  document.getElementById('mode-custom').addEventListener('click', () => setMode('custom'));
+
+  function applyIntroMeta(){
+    const t = UI[LANG];
+    document.getElementById('mode-quick').innerHTML = t.modeQuick + '<small>' + t.modeQuickSub + '</small>';
+    document.getElementById('mode-full').innerHTML = t.modeFull + '<small>' + t.modeFullSub + '</small>';
+    document.getElementById('mode-custom').innerHTML = t.modeCustom + '<small>' + t.modeCustomSub + '</small>';
+    const pills = quizMode === 'quick' ? t.pillsQuick : t.pillsFull;
+    document.getElementById('meta-1').textContent = pills[0];
+    document.getElementById('meta-2').textContent = pills[1];
+    document.getElementById('meta-3').textContent = pills[2];
+    document.getElementById('start-btn').textContent = quizMode === 'custom' ? t.startCustom : t.start;
+  }
+
+  /* ---------------- custom builder ---------------- */
+
+  function renderBuilder(){
+    const t = UI[LANG];
+    document.getElementById('builder-cats-label').textContent = t.builderCats;
+    document.getElementById('builder-qs-label').textContent = t.builderQs;
+    document.getElementById('add-question-btn').textContent = t.addQuestion;
+    document.getElementById('builder-hint').textContent = t.builderHintInvalid;
+
+    const catWrap = document.getElementById('cat-inputs');
+    catWrap.innerHTML = '';
+    customCats.forEach((cat, i) => {
+      const row = document.createElement('div');
+      row.className = 'cat-grid';
+      const emojiInput = document.createElement('input');
+      emojiInput.className = 'emoji-input';
+      emojiInput.maxLength = 4;
+      emojiInput.placeholder = '🎯';
+      emojiInput.setAttribute('aria-label', t.catNamePlaceholder(i + 1) + ' emoji');
+      emojiInput.value = cat.emoji;
+      emojiInput.addEventListener('input', () => { customCats[i].emoji = emojiInput.value; });
+      const nameInput = document.createElement('input');
+      nameInput.placeholder = t.catNamePlaceholder(i + 1);
+      nameInput.setAttribute('aria-label', t.catNamePlaceholder(i + 1));
+      nameInput.value = cat.name;
+      nameInput.addEventListener('input', () => { customCats[i].name = nameInput.value; });
+      row.appendChild(emojiInput);
+      row.appendChild(nameInput);
+      catWrap.appendChild(row);
+    });
+
+    const qWrap = document.getElementById('q-builder-list');
+    qWrap.innerHTML = '';
+    customQs.forEach((q, qi) => {
+      const row = document.createElement('div');
+      row.className = 'q-builder-row';
+
+      const promptInput = document.createElement('input');
+      promptInput.className = 'prompt-input';
+      promptInput.placeholder = t.qPromptPlaceholder;
+      promptInput.setAttribute('aria-label', t.qPromptPlaceholder + ' ' + (qi + 1));
+      promptInput.value = q.prompt;
+      promptInput.addEventListener('input', () => { customQs[qi].prompt = promptInput.value; });
+      row.appendChild(promptInput);
+
+      const optGrid = document.createElement('div');
+      optGrid.className = 'opt-grid';
+      q.opts.forEach((optVal, oi) => {
+        const optInput = document.createElement('input');
+        optInput.placeholder = t.optPlaceholder(oi + 1);
+        optInput.setAttribute('aria-label', t.qPromptPlaceholder + ' ' + (qi + 1) + ': ' + t.optPlaceholder(oi + 1));
+        optInput.value = optVal;
+        optInput.addEventListener('input', () => { customQs[qi].opts[oi] = optInput.value; });
+        optGrid.appendChild(optInput);
+      });
+      row.appendChild(optGrid);
+
+      if(customQs.length > 3){
+        const rm = document.createElement('button');
+        rm.className = 'q-builder-remove';
+        rm.type = 'button';
+        rm.textContent = '✕ ' + t.removeQuestion;
+        rm.addEventListener('click', () => { customQs.splice(qi, 1); renderBuilder(); });
+        row.appendChild(rm);
+      }
+
+      qWrap.appendChild(row);
+    });
+  }
+
+  document.getElementById('add-question-btn').addEventListener('click', () => {
+    if(customQs.length >= 20) return;
+    customQs.push({ prompt:'', opts:['','','',''] });
+    renderBuilder();
+  });
+
+  function validateCustom(){
+    const catsOk = customCats.every(c => c.name.trim().length > 0);
+    const validQs = customQs.filter(q => q.prompt.trim().length > 0 && q.opts.every(o => o.trim().length > 0));
+    return catsOk && validQs.length >= 3;
+  }
+
+  /* ---------------- building the active quiz ---------------- */
+
+  function buildActiveSet(){
+    if(quizMode === 'custom'){
+      const numbers = ['1️⃣','2️⃣','3️⃣','4️⃣'];
+      activeCategories = customCats.map((c, i) => ({
+        id: 'c' + i,
+        name: c.name.trim() || ('Category ' + (i + 1)),
+        emoji: c.emoji.trim() || numbers[i],
+        color: CUSTOM_PALETTE[i % CUSTOM_PALETTE.length]
+      }));
+      activeQuestions = customQs
+        .filter(q => q.prompt.trim().length > 0 && q.opts.every(o => o.trim().length > 0))
+        .map(q => ({
+          types: ['c0','c1','c2','c3'],
+          q: q.prompt.trim(),
+          opts: q.opts.map(o => o.trim())
+        }));
+    } else {
+      activeCategories = TYPE_ORDER.map(k => ({
+        id: k,
+        name: ARCHETYPES[k][LANG].name,
+        emoji: ARCHETYPES[k].glyph,
+        color: ARCHETYPES[k].color
+      }));
+      const pool = quizMode === 'quick' ? QUESTIONS.slice(0, 9) : QUESTIONS.slice();
+      activeQuestions = pool.map(q => ({
+        types: q.types.slice(),
+        q: q[LANG].q,
+        opts: q[LANG].opts.slice()
+      }));
+    }
+
+    scores = {};
+    activeCategories.forEach(c => scores[c.id] = 0);
+    answers = new Array(activeQuestions.length).fill(null);
+    shuffleActiveOptions();
+    qTotal.textContent = activeQuestions.length;
+  }
+
+  function shuffleActiveOptions(){
+    optionOrder = activeQuestions.map(() => {
+      const arr = [0,1,2,3];
+      for(let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    });
+  }
+
+  /* ---------------- quiz rendering ---------------- */
+
+  function renderQuestion(){
+    const item = activeQuestions[current];
+    const order = optionOrder[current];
+    const t = UI[LANG];
+    qEyebrow.textContent = t.questionLabel(current + 1);
+    qText.textContent = item.q;
+    qCurrent.textContent = current + 1;
+    progressFill.style.width = (current / activeQuestions.length * 100) + '%';
+    document.getElementById('progress-track').setAttribute('aria-valuenow', String(Math.round(current / activeQuestions.length * 100)));
+    backBtn.disabled = current === 0;
+
+    optionsEl.innerHTML = '';
+    order.forEach((origIndex, i) => {
+      const type = item.types[origIndex];
+      const label = item.opts[origIndex];
+      const cat = catById(type);
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.type = 'button';
+      btn.style.setProperty('--opt-color', cat.color);
+      if(answers[current] && answers[current].type === type){ btn.style.borderColor = cat.color; }
+      btn.innerHTML = '<span class="badge">' + LETTERS[i] + '</span><span>' + label + '</span>';
+      btn.addEventListener('click', () => selectAnswer(type, label));
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  function selectAnswer(type, label){
+    beep(620, 0.07);
+    buzz(10);
+    if(answers[current]){
+      scores[answers[current].type] -= 1;
+    }
+    answers[current] = { type: type, label: label };
+    scores[type] += 1;
+
+    if(current < activeQuestions.length - 1){
+      current += 1;
+      renderQuestion();
+    } else {
+      showReview();
+    }
+  }
+
+  backBtn.addEventListener('click', () => {
+    if(current > 0){
+      current -= 1;
+      renderQuestion();
+      showScreen('quiz');
+    }
+  });
+
+  // Keyboard shortcuts: 1-4 / A-D picks an option by its on-screen position,
+  // Backspace or ← goes back. Only active while the quiz screen is showing.
+  document.addEventListener('keydown', (e) => {
+    if(!screenQuiz.classList.contains('active')) return;
+    const activeTag = document.activeElement ? document.activeElement.tagName : '';
+    if(activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
+
+    const key = e.key;
+    if(/^[1-4]$/.test(key) || /^[a-dA-D]$/.test(key)){
+      const idx = /^[1-4]$/.test(key) ? (parseInt(key, 10) - 1) : (key.toLowerCase().charCodeAt(0) - 97);
+      const btn = optionsEl.children[idx];
+      if(btn){
+        e.preventDefault();
+        btn.click();
+      }
+      return;
+    }
+    if(key === 'Backspace' || key === 'ArrowLeft'){
+      if(!backBtn.disabled){
+        e.preventDefault();
+        backBtn.click();
+      }
+    }
+  });
+
+  document.getElementById('start-btn').addEventListener('click', () => {
+    if(quizMode === 'custom' && !validateCustom()){
+      document.getElementById('builder-hint').classList.add('show');
+      return;
+    }
+    document.getElementById('builder-hint').classList.remove('show');
+    buildActiveSet();
+    current = 0;
+    renderQuestion();
+    showScreen('quiz');
+  });
+
+  document.getElementById('retake-btn').addEventListener('click', () => {
+    beep(500, 0.06);
+    buildActiveSet();
+    current = 0;
+    renderQuestion();
+    showScreen('quiz');
+  });
+
+  /* ---------------- review screen ---------------- */
+
+  function showReview(){
+    const t = UI[LANG];
+    document.getElementById('review-eyebrow').textContent = t.reviewEyebrow;
+    document.getElementById('see-result-btn').textContent = t.seeResult;
+    document.getElementById('edit-answers-btn').textContent = t.editAnswers;
+
+    const list = document.getElementById('review-list');
+    list.innerHTML = '';
+    activeQuestions.forEach((item, i) => {
+      const ans = answers[i];
+      if(!ans) return;
+      const cat = catById(ans.type);
+      const row = document.createElement('button');
+      row.type = 'button';
+      row.className = 'review-item';
+      const dot = document.createElement('div');
+      dot.className = 'review-dot';
+      dot.style.background = cat.color;
+      const textWrap = document.createElement('div');
+      const qLine = document.createElement('div');
+      qLine.className = 'review-q';
+      qLine.textContent = t.questionLabel(i + 1);
+      const aLine = document.createElement('div');
+      aLine.className = 'review-a';
+      aLine.textContent = ans.label;
+      textWrap.appendChild(qLine);
+      textWrap.appendChild(aLine);
+      row.appendChild(dot);
+      row.appendChild(textWrap);
+      row.addEventListener('click', () => {
+        current = i;
+        renderQuestion();
+        showScreen('quiz');
+      });
+      list.appendChild(row);
+    });
+
+    showScreen('review');
+  }
+
+  document.getElementById('edit-answers-btn').addEventListener('click', () => {
+    current = activeQuestions.length - 1;
+    renderQuestion();
+    showScreen('quiz');
+  });
+
+  document.getElementById('see-result-btn').addEventListener('click', showResults);
+
+  /* ---------------- results ---------------- */
+
+  let tiedIds = [];
+
+  function showResults(){
+    progressFill.style.width = '100%';
+    document.getElementById('progress-track').setAttribute('aria-valuenow', '100');
+    const maxScore = Math.max(...activeCategories.map(c => scores[c.id]));
+    tiedIds = activeCategories.filter(c => scores[c.id] === maxScore).map(c => c.id);
+    winnerId = tiedIds[0];
+
+    document.getElementById('why-toggle').setAttribute('aria-expanded', 'false');
+    document.getElementById('why-list').style.display = 'none';
+    selectDetailTab('strengths');
+
+    showScreen('results');
+    renderResultsText();
+    fireConfetti();
+    beep(880, 0.12);
+    buzz([10,40,10]);
+
+    const winnerCat = catById(winnerId);
+    sessionHistory.push({ emoji: winnerCat.emoji, color: winnerCat.color });
+    renderSessionTrail();
+  }
+
+  document.getElementById('why-toggle').addEventListener('click', function(){
+    const expanded = this.getAttribute('aria-expanded') === 'true';
+    this.setAttribute('aria-expanded', String(!expanded));
+    document.getElementById('why-list').style.display = expanded ? 'none' : 'flex';
+  });
+
+  /* ---------------- detail tabs (strengths / career / fun facts) ---------------- */
+
+  const DETAIL_TABS = ['strengths', 'career', 'fun'];
+
+  function selectDetailTab(name){
+    DETAIL_TABS.forEach(n => {
+      const tab = document.getElementById('tab-' + n);
+      const panel = document.getElementById('panel-' + n);
+      const active = n === name;
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+      panel.hidden = !active;
+    });
+  }
+
+  document.getElementById('detail-tabs').addEventListener('click', (e) => {
+    const btn = e.target.closest('.detail-tab');
+    if(!btn) return;
+    const name = btn.id.replace('tab-', '');
+    selectDetailTab(name);
+    btn.focus();
+  });
+
+  document.getElementById('detail-tabs').addEventListener('keydown', (e) => {
+    if(e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const current = DETAIL_TABS.findIndex(n => document.getElementById('tab-' + n).getAttribute('aria-selected') === 'true');
+    const dir = e.key === 'ArrowRight' ? 1 : -1;
+    const next = (current + dir + DETAIL_TABS.length) % DETAIL_TABS.length;
+    e.preventDefault();
+    selectDetailTab(DETAIL_TABS[next]);
+    document.getElementById('tab-' + DETAIL_TABS[next]).focus();
+  });
+
+  // Largest-remainder rounding: guarantees the returned percentages sum to
+  // exactly 100 (or 0 if every count is 0), instead of each being rounded
+  // independently against its own denominator.
+  function computeLRPercentages(counts){
+    const ids = Object.keys(counts);
+    const total = ids.reduce((s, id) => s + counts[id], 0);
+    const pct = {};
+    if(total === 0){
+      ids.forEach(id => pct[id] = 0);
+      return pct;
+    }
+    const raw = {};
+    let usedSum = 0;
+    ids.forEach(id => {
+      const r = (counts[id] / total) * 100;
+      raw[id] = r;
+      pct[id] = Math.floor(r);
+      usedSum += pct[id];
+    });
+    let remainder = 100 - usedSum;
+    const byRemainder = ids.slice().sort((a, b) => (raw[b] - pct[b]) - (raw[a] - pct[a]));
+    for(let i = 0; i < remainder; i++){
+      pct[byRemainder[i % byRemainder.length]] += 1;
+    }
+    return pct;
+  }
+
+  function rankedScores(){
+    const counts = {};
+    activeCategories.forEach(c => counts[c.id] = scores[c.id]);
+    const pctMap = computeLRPercentages(counts);
+    return activeCategories
+      .map(c => ({ id: c.id, pct: pctMap[c.id] }))
+      .sort((a, b) => b.pct - a.pct);
+  }
+
+  function renderResultsText(){
+    const t = UI[LANG];
+    const winnerCat = catById(winnerId);
+    const rich = ARCHETYPES[winnerId]; // undefined for custom categories
+
+    const tieBadge = document.getElementById('tie-badge');
+    if(tiedIds.length > 1){
+      const names = tiedIds.map(id => catById(id).name);
+      tieBadge.textContent = '🤝 ' + t.tieNote(names);
+      tieBadge.style.display = 'inline-flex';
+    } else {
+      tieBadge.style.display = 'none';
+    }
+
+    document.getElementById('res-glyph').textContent = winnerCat.emoji;
+    document.getElementById('res-glyph').style.background = 'color-mix(in srgb, ' + winnerCat.color + ' 22%, white)';
+    document.getElementById('result-card').style.background = 'radial-gradient(circle at 18% 22%, color-mix(in srgb, ' + winnerCat.color + ' 16%, var(--card-2)) 0%, var(--card-2) 65%)';
+    document.getElementById('res-name').textContent = winnerCat.name;
+    document.getElementById('res-name').style.color = winnerCat.color;
+    document.getElementById('res-tag').textContent = rich ? rich[LANG].tag : t.customResultTag;
+
+    const ranked = rankedScores().filter(r => r.pct > 0);
+
+    const mixEl = document.getElementById('result-mix');
+    mixEl.innerHTML = '';
+    ranked.slice(0, 3).forEach(r => {
+      const cat = catById(r.id);
+      const pill = document.createElement('span');
+      pill.className = 'mix-pill';
+      pill.style.background = cat.color;
+      pill.textContent = cat.emoji + ' ' + r.pct + '% ' + cat.name;
+      mixEl.appendChild(pill);
+    });
+
+    if(ranked.length > 1){
+      const p1 = catById(ranked[0].id).name;
+      const p2 = catById(ranked[1].id).name;
+      let desc = t.mixed(p1, ranked[0].pct, p2, ranked[1].pct);
+      if(rich) desc += ' ' + rich[LANG].desc;
+      document.getElementById('res-desc').textContent = desc;
+    } else {
+      document.getElementById('res-desc').textContent = rich ? rich[LANG].desc : '';
+    }
+
+    // second-closest deep dive
+    const secondEl = document.getElementById('second-note');
+    if(ranked.length > 1){
+      const second = ranked[1];
+      const secondCat = catById(second.id);
+      const secondRich = ARCHETYPES[second.id];
+      secondEl.textContent = secondRich
+        ? t.secondNoteRich(secondCat.name, secondRich[LANG].tag)
+        : t.secondNoteGeneric(secondCat.name, second.pct);
+      secondEl.style.display = 'block';
+    } else {
+      secondEl.style.display = 'none';
+    }
+
+    // rich-only sections (strengths, career) — hide entirely for custom categories
+    document.querySelectorAll('.rich-only').forEach(el => el.classList.toggle('hidden-mode', !rich));
+
+    if(rich){
+      const posEl = document.getElementById('pos-list');
+      posEl.innerHTML = '';
+      rich.strengths[LANG].forEach(s => {
+        const li = document.createElement('li');
+        li.textContent = s;
+        posEl.appendChild(li);
+      });
+      const negEl = document.getElementById('neg-list');
+      negEl.innerHTML = '';
+      rich.watchouts[LANG].forEach(s => {
+        const li = document.createElement('li');
+        li.textContent = s;
+        negEl.appendChild(li);
+      });
+      const rolesEl = document.getElementById('career-roles');
+      rolesEl.innerHTML = '';
+      rich.roles[LANG].forEach(r => {
+        const p = document.createElement('span');
+        p.className = 'tag-pill';
+        p.textContent = r;
+        rolesEl.appendChild(p);
+      });
+      const skillsEl = document.getElementById('career-skills');
+      skillsEl.innerHTML = '';
+      rich.skills[LANG].forEach(s => {
+        const p = document.createElement('span');
+        p.className = 'tag-pill';
+        p.textContent = s;
+        skillsEl.appendChild(p);
+      });
+      if(rich.funFacts){
+        const charEl = document.getElementById('fun-vibe');
+        charEl.innerHTML = '';
+        rich.funFacts.characters.forEach(name => {
+          const p = document.createElement('span');
+          p.className = 'tag-pill';
+          p.textContent = name;
+          charEl.appendChild(p);
+        });
+        document.getElementById('fun-fit').textContent = rich.funFacts.fit[LANG];
+      }
+      if(rich.icon){
+        const iconWrap = document.getElementById('fun-icon-wrap');
+        iconWrap.innerHTML = rich.icon;
+        iconWrap.style.color = winnerCat.color;
+        iconWrap.style.background = 'color-mix(in srgb, ' + winnerCat.color + ' 18%, white)';
+      }
+    }
+
+    const chartCounts = {};
+    activeCategories.forEach(c => chartCounts[c.id] = scores[c.id]);
+    buildChart('chart', activeCategories.map(c => ({ id: c.id, count: scores[c.id] })), computeLRPercentages(chartCounts), tiedIds);
+    renderTeamSelect();
+    renderTeamChart();
+
+    // "why you got this" — which specific answers contributed to the headline pick.
+    // Works for both built-in and custom quizzes since it only needs answers/activeQuestions.
+    const whyList = document.getElementById('why-list');
+    whyList.innerHTML = '';
+    activeQuestions.forEach((item, i) => {
+      const ans = answers[i];
+      if(ans && ans.type === winnerId){
+        const row = document.createElement('div');
+        row.className = 'why-item';
+        const qSpan = document.createElement('span');
+        qSpan.className = 'why-q';
+        qSpan.textContent = t.questionLabel(i + 1) + ':';
+        const aSpan = document.createElement('span');
+        aSpan.textContent = ans.label;
+        row.appendChild(qSpan);
+        row.appendChild(aSpan);
+        whyList.appendChild(row);
+      }
+    });
+  }
+
+  function buildChart(containerId, entries, pctMap, highlightIds){
+    const chart = document.getElementById(containerId);
+    chart.innerHTML = '';
+    const order = entries.slice().sort((a,b) => b.count - a.count);
+    const highlightSet = Array.isArray(highlightIds) ? highlightIds : (highlightIds ? [highlightIds] : []);
+
+    const summaryParts = [];
+
+    order.forEach(entry => {
+      const cat = catById(entry.id);
+      const pct = pctMap[entry.id] || 0;
+      summaryParts.push(cat.name + ' ' + pct + '%');
+
+      const col = document.createElement('div');
+      col.className = 'bar-col';
+
+      const pctLabel = document.createElement('div');
+      pctLabel.className = 'bar-pct';
+      pctLabel.textContent = pct + '%';
+      pctLabel.style.color = cat.color;
+
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.background = cat.color;
+      bar.style.opacity = highlightSet.includes(entry.id) ? '1' : '0.5';
+
+      const label = document.createElement('div');
+      label.className = 'bar-label';
+      label.textContent = cat.name;
+
+      col.appendChild(pctLabel);
+      col.appendChild(bar);
+      col.appendChild(label);
+      chart.appendChild(col);
+
+      requestAnimationFrame(() => {
+        setTimeout(() => { bar.style.height = Math.max(pct * 1.4, 4) + 'px'; }, 60);
+      });
+    });
+
+    const summaryEl = document.getElementById(containerId + '-sr-summary');
+    if(summaryEl) summaryEl.textContent = summaryParts.join(', ');
+  }
+
+  function renderSessionTrail(){
+    const t = UI[LANG];
+    const wrap = document.getElementById('session-trail');
+    if(sessionHistory.length < 2){ wrap.style.display = 'none'; return; }
+    wrap.style.display = 'flex';
+    document.getElementById('session-trail-label').textContent = t.sessionTrail + ':';
+    const chipsEl = document.getElementById('session-trail-chips');
+    chipsEl.innerHTML = '';
+    sessionHistory.forEach(h => {
+      const span = document.createElement('span');
+      span.textContent = h.emoji;
+      chipsEl.appendChild(span);
+    });
+  }
+
+  /* ---------------- team mode ---------------- */
+
+  let team = []; // array of category ids (teammates only, "you" is added implicitly)
+
+  function renderTeamSelect(){
+    const sel = document.getElementById('team-select');
+    const prevVal = sel.value;
+    sel.innerHTML = '';
+    activeCategories.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.emoji + ' ' + c.name;
+      sel.appendChild(opt);
+    });
+    if(prevVal) sel.value = prevVal;
+    document.getElementById('team-add-btn').textContent = UI[LANG].teamAdd;
+    document.getElementById('team-empty').textContent = UI[LANG].teamEmpty;
+    renderTeamRoster();
+  }
+
+  function renderTeamRoster(){
+    const roster = document.getElementById('team-roster');
+    roster.innerHTML = '';
+    team.forEach((id, i) => {
+      const cat = catById(id);
+      if(!cat) return;
+      const chip = document.createElement('span');
+      chip.className = 'team-chip';
+      chip.innerHTML = '<span>' + cat.emoji + ' ' + cat.name + '</span>';
+      const rm = document.createElement('button');
+      rm.type = 'button';
+      rm.textContent = '✕';
+      rm.setAttribute('aria-label', 'Remove ' + cat.name + ' from team');
+      rm.addEventListener('click', () => { team.splice(i, 1); renderTeamRoster(); renderTeamChart(); });
+      chip.appendChild(rm);
+      roster.appendChild(chip);
+    });
+    document.getElementById('team-empty').style.display = team.length === 0 ? 'block' : 'none';
+  }
+
+  document.getElementById('team-add-btn').addEventListener('click', () => {
+    const id = document.getElementById('team-select').value;
+    if(!id || team.length >= 12) return;
+    team.push(id);
+    beep(650, 0.05);
+    renderTeamRoster();
+    renderTeamChart();
+  });
+
+  function renderTeamChart(){
+    const t = UI[LANG];
+    const noteEl = document.getElementById('team-note');
+    const chartEl = document.getElementById('team-chart');
+
+    if(team.length === 0){
+      noteEl.classList.remove('show');
+      chartEl.innerHTML = '';
+      return;
+    }
+
+    const all = [winnerId].concat(team);
+    const counts = {};
+    all.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
+    const entries = Object.keys(counts).map(id => ({ id: id, count: counts[id] }));
+
+    buildChart('team-chart', entries, computeLRPercentages(counts), null);
+
+    const uniqueCount = Object.keys(counts).length;
+    const totalCount = all.length;
+    let note;
+    if(team.length === 1){
+      const you = catById(winnerId);
+      const friend = catById(team[0]);
+      const youRich = ARCHETYPES[winnerId];
+      const friendRich = ARCHETYPES[team[0]];
+      if(team[0] === winnerId){
+        note = t.teamAllSame(you.name);
+      } else if(youRich && friendRich){
+        note = t.teamComparePair(you.name, youRich.pairTrait[LANG], friend.name, friendRich.pairTrait[LANG]);
+      } else {
+        note = t.teamMix(uniqueCount, totalCount);
+      }
+    } else if(uniqueCount === 1){
+      note = t.teamAllSame(catById(winnerId).name);
+    } else if(uniqueCount === totalCount){
+      note = t.teamAllDiff;
+    } else {
+      note = t.teamMix(uniqueCount, totalCount);
+    }
+    noteEl.textContent = note;
+    noteEl.classList.add('show');
+  }
+
+  /* ---------------- shared modal system (focus trap + Escape, reused by every modal) ---------------- */
+
+  let activeModalBackdrop = null;
+  let activeModalPanel = null;
+  let modalTriggerEl = null;
+
+  function openModal(backdropEl, panelEl, triggerEl, focusEl){
+    activeModalBackdrop = backdropEl;
+    activeModalPanel = panelEl;
+    modalTriggerEl = triggerEl || document.activeElement;
+    backdropEl.classList.add('show');
+    (focusEl || panelEl.querySelector('button, [href], input, select, textarea')).focus();
+    document.addEventListener('keydown', handleModalKeydown);
+  }
+
+  function closeModal(){
+    if(activeModalBackdrop) activeModalBackdrop.classList.remove('show');
+    document.removeEventListener('keydown', handleModalKeydown);
+    if(modalTriggerEl && typeof modalTriggerEl.focus === 'function') modalTriggerEl.focus();
+    activeModalBackdrop = null;
+    activeModalPanel = null;
+  }
+
+  function handleModalKeydown(e){
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      closeModal();
+      return;
+    }
+    if(e.key === 'Tab' && activeModalPanel){
+      const focusable = activeModalPanel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if(focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if(e.shiftKey && document.activeElement === first){
+        e.preventDefault();
+        last.focus();
+      } else if(!e.shiftKey && document.activeElement === last){
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  /* ---------------- archetype preview modal ---------------- */
+
+  const archetypeModalBackdrop = document.getElementById('archetype-modal');
+  const archetypeModalPanel = archetypeModalBackdrop.querySelector('.modal-panel');
+  let currentModalArchetypeKey = null;
+
+  function openArchetypeModal(key, triggerEl){
+    const a = ARCHETYPES[key];
+    if(!a) return;
+    currentModalArchetypeKey = key;
+    document.getElementById('modal-glyph').textContent = a.glyph;
+    document.getElementById('modal-glyph').style.background = 'color-mix(in srgb, ' + a.color + ' 22%, white)';
+    document.getElementById('modal-name').textContent = a[LANG].name;
+    document.getElementById('modal-name').style.color = a.color;
+    document.getElementById('modal-tag').textContent = a[LANG].tag;
+    document.getElementById('modal-desc').textContent = a[LANG].desc;
+    const list = document.getElementById('modal-strengths');
+    list.innerHTML = '';
+    a.strengths[LANG].slice(0, 2).forEach(s => {
+      const li = document.createElement('li');
+      li.textContent = s;
+      list.appendChild(li);
+    });
+    openModal(archetypeModalBackdrop, archetypeModalPanel, triggerEl, document.getElementById('modal-close'));
+  }
+
+  document.querySelectorAll('#preview-chips [data-key]').forEach(el => {
+    el.addEventListener('click', () => openArchetypeModal(el.getAttribute('data-key'), el));
+  });
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  archetypeModalBackdrop.addEventListener('click', (e) => { if(e.target === archetypeModalBackdrop) closeModal(); });
+
+  /* ---------------- legend modal (all 9 types at a glance) ---------------- */
+
+  const legendModalBackdrop = document.getElementById('legend-modal');
+  const legendModalPanel = legendModalBackdrop.querySelector('.modal-panel');
+
+  function renderLegendList(){
+    document.getElementById('legend-modal-title').textContent = UI[LANG].legendTitle;
+    const list = document.getElementById('legend-list');
+    list.innerHTML = '';
+    TYPE_ORDER.forEach(key => {
+      const a = ARCHETYPES[key];
+      const row = document.createElement('div');
+      row.className = 'legend-row';
+
+      const glyph = document.createElement('span');
+      glyph.className = 'legend-glyph';
+      glyph.style.background = 'color-mix(in srgb, ' + a.color + ' 22%, white)';
+      glyph.setAttribute('aria-hidden', 'true');
+      glyph.textContent = a.glyph;
+
+      const textWrap = document.createElement('span');
+      textWrap.className = 'legend-text';
+      const nameEl = document.createElement('span');
+      nameEl.className = 'legend-name';
+      nameEl.style.color = a.color;
+      nameEl.textContent = a[LANG].name;
+      const tagEl = document.createElement('span');
+      tagEl.className = 'legend-tag';
+      tagEl.textContent = a[LANG].tag;
+      textWrap.appendChild(nameEl);
+      textWrap.appendChild(tagEl);
+
+      row.appendChild(glyph);
+      row.appendChild(textWrap);
+      list.appendChild(row);
+    });
+  }
+
+  function openLegendModal(triggerEl){
+    renderLegendList();
+    openModal(legendModalBackdrop, legendModalPanel, triggerEl, document.getElementById('legend-modal-close'));
+  }
+
+  document.getElementById('legend-modal-close').addEventListener('click', closeModal);
+  legendModalBackdrop.addEventListener('click', (e) => { if(e.target === legendModalBackdrop) closeModal(); });
+  document.getElementById('legend-trigger').addEventListener('click', function(){ openLegendModal(this); });
+  document.getElementById('legend-trigger-results').addEventListener('click', function(){ openLegendModal(this); });
+
+  /* ---------------- share + download ---------------- */
+
+  document.getElementById('share-btn').addEventListener('click', async () => {
+    const t = UI[LANG];
+    const winnerCat = catById(winnerId);
+    const rich = ARCHETYPES[winnerId];
+    const tagText = rich ? rich[LANG].tag : t.customResultTag;
+    const text = (LANG === 'en' ? "I'm a " : "ฉันคือ ") + winnerCat.emoji + ' ' + winnerCat.name + '! ' + tagText;
+
+    if(navigator.share){
+      try{ await navigator.share({ text: text }); return; }catch(e){ /* fall through */ }
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      try{ await navigator.clipboard.writeText(text); showToast(t.shareCopied); return; }catch(e){}
+    }
+    showToast(text);
+  });
+
+  document.getElementById('download-btn').addEventListener('click', () => {
+    const winnerCat = catById(winnerId);
+    const rich = ARCHETYPES[winnerId];
+    const t = UI[LANG];
+    const ranked = rankedScores().filter(r => r.pct > 0).slice(0, 3);
+    const canvas = document.getElementById('share-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    ctx.clearRect(0, 0, W, H);
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, winnerCat.color);
+    grad.addColorStop(1, '#ffffff');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    const pad = 70;
+    roundRect(ctx, pad, pad, W - pad * 2, H - pad * 2, 48);
+    ctx.fill();
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#221F35';
+    ctx.font = '140px sans-serif';
+    ctx.fillText(winnerCat.emoji, W / 2, 330);
+
+    ctx.font = '700 56px Georgia, serif';
+    ctx.fillStyle = winnerCat.color;
+    wrapText(ctx, winnerCat.name, W / 2, 420, W - pad * 4, 62);
+
+    ctx.font = '400 30px Georgia, serif';
+    ctx.fillStyle = '#6E6A85';
+    const tagText = rich ? rich[LANG].tag : t.customResultTag;
+    wrapText(ctx, tagText, W / 2, 500, W - pad * 4, 38);
+
+    let barY = 620;
+    ranked.forEach(r => {
+      const cat = catById(r.id);
+      ctx.textAlign = 'left';
+      ctx.font = '600 26px sans-serif';
+      ctx.fillStyle = '#221F35';
+      ctx.fillText(cat.emoji + ' ' + cat.name, pad + 30, barY + 20);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = cat.color;
+      ctx.fillText(r.pct + '%', W - pad - 30, barY + 20);
+      ctx.fillStyle = '#EDE9F9';
+      roundRect(ctx, pad + 30, barY + 32, W - pad * 2 - 60, 16, 8);
+      ctx.fill();
+      ctx.fillStyle = cat.color;
+      roundRect(ctx, pad + 30, barY + 32, Math.max((W - pad * 2 - 60) * (r.pct / 100), 12), 16, 8);
+      ctx.fill();
+      barY += 80;
+    });
+
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'my-dev-result.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+  });
+
+  function roundRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight){
+    const words = text.split(' ');
+    let line = '';
+    let lines = [];
+    words.forEach(word => {
+      const test = line + word + ' ';
+      if(ctx.measureText(test).width > maxWidth && line !== ''){
+        lines.push(line);
+        line = word + ' ';
+      } else {
+        line = test;
+      }
+    });
+    lines.push(line);
+    const startY = y - ((lines.length - 1) * lineHeight) / 2;
+    lines.forEach((l, i) => ctx.fillText(l.trim(), x, startY + i * lineHeight));
+  }
+
+  /* ---------------- static text + language ---------------- */
+
+  function applyStaticText(){
+    const t = UI[LANG];
+    document.getElementById('html-root').lang = LANG;
+    document.getElementById('brand-text').textContent = t.brand;
+    document.getElementById('legend-trigger').textContent = t.legendTrigger;
+    document.getElementById('legend-trigger-results').textContent = t.legendTrigger;
+    document.getElementById('intro-title').firstChild.textContent = t.titlePre;
+    document.getElementById('intro-title-hl').textContent = t.titleHl;
+    document.getElementById('intro-lede').textContent = t.lede;
+    document.getElementById('back-btn').textContent = t.back;
+    document.getElementById('key-hint').textContent = t.keyHint;
+    document.getElementById('why-toggle-label').textContent = t.whyLabel;
+    document.getElementById('result-eyebrow').textContent = t.resultEyebrow;
+    document.getElementById('tab-strengths').textContent = t.tabStrengths;
+    document.getElementById('tab-career').textContent = t.tabCareer;
+    document.getElementById('tab-fun').textContent = t.tabFun;
+    document.getElementById('pos-title').textContent = t.posTitle;
+    document.getElementById('neg-title').textContent = t.negTitle;
+    document.getElementById('career-roles-label').textContent = t.rolesLabel;
+    document.getElementById('career-skills-label').textContent = t.skillsLabel;
+    document.getElementById('fun-vibe-label').textContent = t.characterLabel;
+    document.getElementById('fun-fit-label').textContent = t.fitLabel;
+    document.getElementById('chart-section-label').textContent = t.chartLabel;
+    document.getElementById('team-section-label').textContent = t.teamLabel;
+    document.getElementById('share-btn').textContent = t.shareBtn;
+    document.getElementById('download-btn').textContent = t.downloadBtn;
+    document.getElementById('retake-btn').textContent = t.retake;
+    document.getElementById('hint-text').textContent = t.hint;
+
+    const strip = document.getElementById('archetype-strip');
+    strip.innerHTML = '';
+    TYPE_ORDER.forEach((key, i) => {
+      const el = document.createElement('button');
+      el.className = 'chip';
+      el.type = 'button';
+      el.textContent = t.chips[i];
+      el.title = t.chipHint;
+      el.addEventListener('click', () => openArchetypeModal(key, el));
+      strip.appendChild(el);
+    });
+
+    applyIntroMeta();
+
+    document.getElementById('lang-select').value = LANG;
+  }
+
+  function setLang(lang){
+    LANG = lang;
+    applyStaticText();
+    if(archetypeModalBackdrop.classList.contains('show') && currentModalArchetypeKey){
+      const a = ARCHETYPES[currentModalArchetypeKey];
+      document.getElementById('modal-name').textContent = a[LANG].name;
+      document.getElementById('modal-tag').textContent = a[LANG].tag;
+      document.getElementById('modal-desc').textContent = a[LANG].desc;
+      const list = document.getElementById('modal-strengths');
+      list.innerHTML = '';
+      a.strengths[LANG].slice(0, 2).forEach(s => {
+        const li = document.createElement('li');
+        li.textContent = s;
+        list.appendChild(li);
+      });
+    }
+    if(legendModalBackdrop.classList.contains('show')){
+      renderLegendList();
+    }
+    if(screenResults.classList.contains('active')){
+      // rebuild category names in the new language, then re-render everything
+      activeCategories.forEach(c => {
+        if(ARCHETYPES[c.id]) c.name = ARCHETYPES[c.id][LANG].name;
+      });
+      renderResultsText();
+      renderSessionTrail();
+    } else if(screenReview.classList.contains('active')){
+      showReview();
+    } else if(screenQuiz.classList.contains('active')){
+      renderQuestion();
+    } else if(quizMode === 'custom'){
+      renderBuilder();
+    }
+  }
+
+  document.getElementById('lang-select').addEventListener('change', (e) => setLang(e.target.value));
+
+  /* ---------------- init ---------------- */
+
+  applyStaticText();
+  setMode('quick');
+})();
+</script>
+
+</body>
+</html>
